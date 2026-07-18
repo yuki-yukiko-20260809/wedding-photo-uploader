@@ -1396,6 +1396,476 @@ button {
   }
 
 }
+
+/* =========================================================
+   トップ画面：1画面完結版
+   ※ 必ず </style> の直前に置く
+========================================================= */
+
+/* トップ表示中だけページ全体のスクロールを禁止 */
+body:has(#selectScreen.active) {
+  overflow: hidden;
+}
+
+
+/*
+ * トップ画面は .container のサイズに影響されず
+ * 画面全体を使用する
+ */
+#selectScreen.active.wedding-home {
+  position: fixed;
+  inset: 0;
+
+  z-index: 100;
+
+  width: 100vw;
+  height: 100dvh;
+  min-height: 0;
+
+  margin: 0;
+  padding: 8px;
+
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #e6d8c6 0%,
+      #efe5d8 50%,
+      #e4d4c1 100%
+    );
+}
+
+
+/* メインカード */
+#selectScreen.active .wedding-shell {
+  position: relative;
+
+  width: min(100%, 430px);
+
+  /* 必ずスマホ画面内に収める */
+  height: calc(100dvh - 16px);
+  max-height: 850px;
+
+  margin: 0 auto;
+
+  padding:
+    clamp(22px, 4vh, 34px)
+    18px
+    12px;
+
+  overflow: hidden;
+
+  border-radius:
+    38px
+    38px
+    22px
+    22px;
+
+  background: #fbf8f3;
+
+  border:
+    1px solid
+    rgba(185, 155, 115, 0.52);
+
+  box-shadow:
+    0 8px 26px
+    rgba(99, 74, 43, 0.12);
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* 点線枠 */
+#selectScreen.active .wedding-shell::before {
+  content: "";
+
+  position: absolute;
+
+  inset:
+    20px
+    12px
+    10px;
+
+  border:
+    1px dashed
+    rgba(184, 151, 109, 0.5);
+
+  border-radius: 26px;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+/* 中身を1画面に均等配置 */
+#selectScreen.active .wedding-content {
+  position: relative;
+
+  z-index: 2;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+/* 上部 */
+#selectScreen.active .wedding-names {
+  margin: 0;
+
+  font-size:
+    clamp(10px, 2.8vw, 14px);
+
+  letter-spacing:
+    clamp(3px, 1vw, 5px);
+
+  line-height: 1.2;
+}
+
+
+#selectScreen.active .wedding-party-title {
+  margin-top: 4px;
+
+  font-size:
+    clamp(9px, 2.5vw, 12px);
+
+  letter-spacing: 3px;
+
+  line-height: 1.2;
+}
+
+
+#selectScreen.active .wedding-heart {
+  margin-top: 5px;
+
+  font-size:
+    clamp(18px, 5vw, 26px);
+
+  line-height: 1;
+}
+
+
+/* SHARE YOUR PHOTOS */
+#selectScreen.active .wedding-hero-title {
+  margin: 7px 0 0;
+
+  font-size:
+    clamp(29px, 8.5vw, 43px);
+
+  line-height: 1;
+
+  letter-spacing: 1px;
+}
+
+
+/* 飾り */
+#selectScreen.active .wedding-divider {
+  width: auto;
+
+  margin: 4px auto;
+
+  font-size: 17px;
+
+  line-height: 1;
+}
+
+
+/* 説明文 */
+#selectScreen.active .wedding-lead {
+  margin: 3px 0 7px;
+
+  font-size:
+    clamp(11px, 3.2vw, 14px);
+
+  line-height: 1.55;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================
+   3つの操作カード
+========================= */
+
+#selectScreen.active .wedding-action-card {
+  position: relative;
+
+  width: 100%;
+  min-height: 0;
+  height: clamp(62px, 10.5vh, 82px);
+
+  margin-top: 6px;
+
+  padding:
+    6px
+    30px
+    6px
+    70px;
+
+  flex-shrink: 0;
+
+  border-radius: 13px;
+
+  text-align: left;
+}
+
+
+/* 左側 */
+#selectScreen.active
+.wedding-action-card::before {
+  width: 58px;
+}
+
+
+/* 右矢印 */
+#selectScreen.active
+.wedding-action-card::after {
+  right: 10px;
+
+  font-size: 30px;
+}
+
+
+/* アイコン */
+#selectScreen.active
+.wedding-action-icon {
+  left: 15px;
+
+  width: 28px;
+  height: 28px;
+
+  font-size: 24px;
+}
+
+
+/* カードタイトル */
+#selectScreen.active
+.wedding-action-title {
+  padding-right: 10px;
+
+  font-size:
+    clamp(17px, 4.8vw, 22px);
+
+  line-height: 1.15;
+
+  letter-spacing: 1px;
+}
+
+
+/* 最大30枚など */
+#selectScreen.active
+.wedding-action-note {
+  margin-top: 3px;
+
+  padding:
+    3px
+    8px;
+
+  font-size:
+    clamp(8px, 2.2vw, 10px);
+
+  line-height: 1.1;
+}
+
+
+/* ギャラリーボタン */
+#selectScreen.active
+.wedding-gallery-card {
+  height:
+    clamp(58px, 9vh, 72px);
+
+  min-height: 0;
+
+  padding-left: 62px;
+}
+
+
+#selectScreen.active
+.wedding-gallery-card::before {
+  width: 50px;
+
+  background: transparent;
+}
+
+
+#selectScreen.active
+.wedding-gallery-card
+.wedding-action-icon {
+  left: 12px;
+
+  font-size: 23px;
+}
+
+
+#selectScreen.active
+.wedding-gallery-card
+.wedding-action-title {
+  font-size:
+    clamp(11px, 3.3vw, 15px);
+
+  line-height: 1.35;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* =========================
+   下部説明
+========================= */
+
+#selectScreen.active
+.wedding-message-box {
+  margin-top: 6px;
+
+  padding:
+    6px
+    8px;
+
+  border-radius: 10px;
+
+  font-size:
+    clamp(7px, 2vw, 9px);
+
+  line-height: 1.4;
+
+  letter-spacing: 0;
+}
+
+
+/* Developed by */
+#selectScreen.active
+.wedding-developed {
+  margin-top: 5px;
+
+  padding: 0;
+
+  font-size:
+    clamp(8px, 2.2vw, 11px);
+
+  line-height: 1.2;
+}
+
+
+/* 星 */
+#selectScreen.active
+.wedding-star {
+  font-size: 11px;
+
+  opacity: 0.55;
+}
+
+
+#selectScreen.active .star-1 {
+  top: 80px;
+  left: 22px;
+}
+
+
+#selectScreen.active .star-2 {
+  top: 140px;
+  right: 24px;
+}
+
+
+#selectScreen.active .star-3 {
+  top: 300px;
+  left: 16px;
+}
+
+
+#selectScreen.active .star-4 {
+  bottom: 70px;
+  right: 16px;
+}
+
+
+/* =========================
+   高さが低いスマホ
+   iPhone SE等
+========================= */
+
+@media (max-height: 700px) {
+
+  #selectScreen.active .wedding-shell {
+    padding-top: 19px;
+  }
+
+  #selectScreen.active .wedding-heart {
+    display: none;
+  }
+
+  #selectScreen.active .wedding-divider {
+    display: none;
+  }
+
+  #selectScreen.active .wedding-hero-title {
+    margin-top: 5px;
+
+    font-size:
+      clamp(27px, 8vw, 36px);
+  }
+
+  #selectScreen.active .wedding-lead {
+    margin:
+      4px
+      0;
+  }
+
+  #selectScreen.active
+  .wedding-action-card {
+    height:
+      clamp(55px, 10vh, 66px);
+
+    margin-top: 5px;
+  }
+
+  #selectScreen.active
+  .wedding-message-box {
+    padding: 4px 7px;
+
+    line-height: 1.25;
+  }
+
+  #selectScreen.active
+  .wedding-developed {
+    margin-top: 3px;
+  }
+
+}
+
+
+/* =========================
+   さらに高さが低い場合
+========================= */
+
+@media (max-height: 600px) {
+
+  #selectScreen.active
+  .wedding-party-title {
+    display: none;
+  }
+
+  #selectScreen.active
+  .wedding-message-box {
+    display: none;
+  }
+
+  #selectScreen.active
+  .wedding-action-card {
+    height: 54px;
+  }
+
+}
   
 </style>
 
