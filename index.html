@@ -758,6 +758,43 @@ body:has(#selectScreen.active) {
   outline: 3px solid rgba(160, 125, 78, 0.65);
   outline-offset: 2px;
 }
+/* =========================================
+   ギャラリー右上ダウンロードアイコン
+========================================= */
+
+.gallery-topbar {
+  position: relative;
+  width: 100%;
+  height: 44px;
+}
+
+.gallery-download-icon {
+  position: absolute;
+
+  top: 0;
+  right: 0;
+
+  width: 44px;
+  height: 44px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #111;
+
+  font-size: 28px;
+  line-height: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
   
 </style>
 
@@ -1044,7 +1081,19 @@ COMPLETE!
   id="galleryScreen"
   class="screen"
 >
+<div class="gallery-topbar">
 
+  <button
+    type="button"
+    class="gallery-download-icon"
+    onclick="toggleSelectionMode()"
+    aria-label="選択してダウンロード"
+  >
+    ↓
+  </button>
+
+</div>
+  
 <h1>
 OUR<br>
 GALLERY
