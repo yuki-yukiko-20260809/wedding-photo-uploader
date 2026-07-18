@@ -217,11 +217,6 @@
     }
 
 
-    /* =========================
-       選択写真
-    ========================= */
-
-
     .photo-grid {
 
       display:
@@ -327,11 +322,6 @@
     }
 
 
-    /* =========================
-       アップロード
-    ========================= */
-
-
     .upload-icon {
 
       font-size:
@@ -424,11 +414,6 @@
     }
 
 
-    /* =========================
-       ギャラリー
-    ========================= */
-
-
     .gallery-grid {
 
       display:
@@ -496,11 +481,6 @@
         #666;
 
     }
-
-
-    /* =========================
-       モーダル
-    ========================= */
 
 
     .modal {
@@ -610,8 +590,6 @@
 <div class="container">
 
 
-  <!-- トップ -->
-
   <section
     id="selectScreen"
     class="screen active"
@@ -670,13 +648,11 @@
     <div
       class="note"
     >
-      一度に最大10枚まで選択できます
+      一度に最大30枚まで選択できます
     </div>
 
   </section>
 
-
-  <!-- 写真確認 -->
 
   <section
     id="confirmScreen"
@@ -744,8 +720,6 @@
   </section>
 
 
-  <!-- アップロード中 -->
-
   <section
     id="uploadScreen"
     class="screen"
@@ -779,7 +753,6 @@
       class="progress-area"
     >
 
-
       <div
         class="progress-bar"
       >
@@ -808,7 +781,6 @@
         0枚中 0枚完了
       </div>
 
-
     </div>
 
 
@@ -826,8 +798,6 @@
 
   </section>
 
-
-  <!-- 完了 -->
 
   <section
     id="completeScreen"
@@ -885,8 +855,6 @@
 
   </section>
 
-
-  <!-- ギャラリー -->
 
   <section
     id="galleryScreen"
@@ -948,14 +916,11 @@
       トップに戻る
     </button>
 
-
   </section>
 
 
 </div>
 
-
-<!-- 拡大モーダル -->
 
 <div
   id="imageModal"
@@ -996,16 +961,15 @@
 
 
   const MAX_FILES =
-    10;
+    30;
+
+
+  const PARALLEL_UPLOADS =
+    2;
 
 
   let selectedFiles =
     [];
-
-
-/* ==================================================
-   ファイル選択
-================================================== */
 
 
   document
@@ -1022,16 +986,13 @@
     event
   ) {
 
-
     const files =
       Array.from(
         event.target.files
       );
 
-
     files.forEach(
       file => {
-
 
         if (
           !file.type
@@ -1039,64 +1000,43 @@
               'image/'
             )
         ) {
-
           return;
-
         }
-
 
         if (
           selectedFiles.length
           <
           MAX_FILES
         ) {
-
-
           selectedFiles.push(
             file
           );
-
-
         }
-
 
       }
     );
 
-
     event.target.value =
       '';
-
 
     renderPreview();
 
   }
 
 
-/* ==================================================
-   プレビュー
-================================================== */
-
-
   function renderPreview() {
-
 
     if (
       selectedFiles.length
       ===
       0
     ) {
-
-
       showScreen(
         'selectScreen'
       );
 
-
       return;
-
     }
-
 
     const grid =
       document
@@ -1104,18 +1044,14 @@
           'photoGrid'
         );
 
-
     grid.innerHTML =
       '';
 
-
     selectedFiles.forEach(
-
       (
         file,
         index
       ) => {
-
 
         const item =
           document
@@ -1123,10 +1059,8 @@
               'div'
             );
 
-
         item.className =
           'photo-item';
-
 
         const img =
           document
@@ -1134,13 +1068,11 @@
               'img'
             );
 
-
         img.src =
           URL
             .createObjectURL(
               file
             );
-
 
         const deleteButton =
           document
@@ -1148,63 +1080,47 @@
               'button'
             );
 
-
         deleteButton.className =
           'delete-btn';
-
 
         deleteButton.textContent =
           '×';
 
-
         deleteButton.onclick =
           () => {
-
 
             selectedFiles.splice(
               index,
               1
             );
 
-
             renderPreview();
 
-
           };
-
 
         item.appendChild(
           img
         );
 
-
         item.appendChild(
           deleteButton
         );
-
 
         grid.appendChild(
           item
         );
 
-
       }
-
     );
-
 
     document
       .getElementById(
         'photoCount'
       )
       .textContent =
-
       selectedFiles.length
-
       +
-
       '枚選択中';
-
 
     showScreen(
       'confirmScreen'
@@ -1213,24 +1129,16 @@
   }
 
 
-/* ==================================================
-   画面切替
-================================================== */
-
-
   function showScreen(
     screenId
   ) {
-
 
     document
       .querySelectorAll(
         '.screen'
       )
       .forEach(
-
         screen => {
-
 
           screen
             .classList
@@ -1238,11 +1146,8 @@
               'active'
             );
 
-
         }
-
       );
-
 
     document
       .getElementById(
@@ -1253,7 +1158,6 @@
         'active'
       );
 
-
     window.scrollTo(
       0,
       0
@@ -1262,155 +1166,191 @@
   }
 
 
-/* ==================================================
-   アップロード
-================================================== */
-
-
   async function startUpload() {
-
 
     if (
       selectedFiles.length
       ===
       0
     ) {
-
       return;
-
     }
-
 
     showScreen(
       'uploadScreen'
     );
 
+    document
+      .getElementById(
+        'errorMessage'
+      )
+      .textContent =
+      '';
+
+    const filesToUpload =
+      [...selectedFiles];
 
     const total =
-      selectedFiles.length;
-
+      filesToUpload.length;
 
     let completed =
       0;
 
+    let currentIndex =
+      0;
 
-    for (
-      const file
-      of
-      selectedFiles
-    ) {
-
-
-      try {
+    let failed =
+      false;
 
 
-        const base64 =
-          await
-          fileToBase64(
-            file
-          );
+    function updateProgress() {
 
-
-        await
-        uploadSingleFile(
-
-          base64,
-
-          file.name,
-
-          file.type
-
+      const percent =
+        Math.round(
+          completed
+          /
+          total
+          *
+          100
         );
 
+      document
+        .getElementById(
+          'progress'
+        )
+        .style
+        .width =
+        percent
+        +
+        '%';
 
-        completed++;
+      document
+        .getElementById(
+          'progressText'
+        )
+        .textContent =
+        percent
+        +
+        '%';
 
+      document
+        .getElementById(
+          'progressCount'
+        )
+        .textContent =
+        total
+        +
+        '枚中 '
+        +
+        completed
+        +
+        '枚完了';
 
-        const percent =
-          Math.round(
-
-            completed
-            /
-            total
-            *
-            100
-
-          );
-
-
-        document
-          .getElementById(
-            'progress'
-          )
-          .style
-          .width =
-
-          percent
-
-          +
-
-          '%';
-
-
-        document
-          .getElementById(
-            'progressText'
-          )
-          .textContent =
-
-          percent
-
-          +
-
-          '%';
+    }
 
 
-        document
-          .getElementById(
-            'progressCount'
-          )
-          .textContent =
+    async function worker() {
 
-          total
-
-          +
-
-          '枚中 '
-
-          +
-
-          completed
-
-          +
-
-          '枚完了';
-
-
-      } catch (
-        error
+      while (
+        true
       ) {
 
+        const index =
+          currentIndex;
 
-        console.error(
+        currentIndex++;
+
+        if (
+          index
+          >=
+          total
+        ) {
+          return;
+        }
+
+        const file =
+          filesToUpload[
+            index
+          ];
+
+        try {
+
+          const base64 =
+            await
+            fileToBase64(
+              file
+            );
+
+          await
+          uploadSingleFile(
+            base64,
+            file.name,
+            file.type
+          );
+
+          completed++;
+
+          updateProgress();
+
+        } catch (
           error
-        );
+        ) {
 
+          console.error(
+            error
+          );
 
-        document
-          .getElementById(
-            'errorMessage'
-          )
-          .textContent =
+          failed =
+            true;
 
-          'アップロード中にエラーが発生しました。';
+          document
+            .getElementById(
+              'errorMessage'
+            )
+            .textContent =
+            '一部の写真のアップロードに失敗しました。通信環境を確認して、もう一度お試しください。';
 
+          return;
 
-        return;
-
+        }
 
       }
 
+    }
 
+
+    updateProgress();
+
+
+    const workers =
+      [];
+
+    for (
+      let i = 0;
+      i <
+      Math.min(
+        PARALLEL_UPLOADS,
+        total
+      );
+      i++
+    ) {
+
+      workers.push(
+        worker()
+      );
+
+    }
+
+
+    await Promise.all(
+      workers
+    );
+
+
+    if (
+      failed
+    ) {
+      return;
     }
 
 
@@ -1425,98 +1365,73 @@
     file
   ) {
 
-
     return new Promise(
-
       (
         resolve,
         reject
       ) => {
 
-
         const reader =
           new FileReader();
-
 
         reader.onload =
           () => {
 
-
             resolve(
-
               reader
                 .result
                 .split(
                   ','
                 )[1]
-
             );
-
 
           };
 
-
         reader.onerror =
           reject;
-
 
         reader.readAsDataURL(
           file
         );
 
-
       }
-
     );
 
   }
 
 
   async function uploadSingleFile(
-
     base64,
-
     fileName,
-
     mimeType
-
   ) {
-
 
     const body =
       new URLSearchParams();
-
 
     body.append(
       'action',
       'upload'
     );
 
-
     body.append(
       'fileData',
       base64
     );
-
 
     body.append(
       'fileName',
       fileName
     );
 
-
     body.append(
       'mimeType',
       mimeType
     );
 
-
     await fetch(
-
       API_URL,
-
       {
-
         method:
           'POST',
 
@@ -1524,34 +1439,23 @@
           'no-cors',
 
         headers: {
-
           'Content-Type':
             'application/x-www-form-urlencoded'
-
         },
 
         body:
           body.toString()
-
       }
-
     );
 
   }
 
 
-/* ==================================================
-   ギャラリー
-================================================== */
-
-
   function openGallery() {
-
 
     showScreen(
       'galleryScreen'
     );
-
 
     const grid =
       document
@@ -1559,13 +1463,11 @@
           'galleryGrid'
         );
 
-
     const loading =
       document
         .getElementById(
           'galleryLoading'
         );
-
 
     const empty =
       document
@@ -1573,18 +1475,14 @@
           'galleryEmpty'
         );
 
-
     grid.innerHTML =
       '';
-
 
     loading.style.display =
       'block';
 
-
     empty.style.display =
       'none';
-
 
     const oldScript =
       document
@@ -1592,17 +1490,11 @@
           'galleryJsonp'
         );
 
-
     if (
       oldScript
     ) {
-
-
       oldScript.remove();
-
-
     }
-
 
     const script =
       document
@@ -1610,50 +1502,33 @@
           'script'
         );
 
-
     script.id =
       'galleryJsonp';
 
-
     script.src =
-
       API_URL
-
       +
-
       '?action=gallery'
-
       +
-
       '&callback=renderGallery'
-
       +
-
       '&t='
-
       +
-
       Date.now();
-
 
     script.onerror =
       () => {
 
-
         loading.style.display =
           'none';
-
 
         empty.style.display =
           'block';
 
-
         empty.textContent =
           '写真の読み込みに失敗しました';
 
-
       };
-
 
     document.body
       .appendChild(
@@ -1663,15 +1538,9 @@
   }
 
 
-/* ==================================================
-   ギャラリー描画
-================================================== */
-
-
   function renderGallery(
     images
   ) {
-
 
     const grid =
       document
@@ -1679,13 +1548,11 @@
           'galleryGrid'
         );
 
-
     const loading =
       document
         .getElementById(
           'galleryLoading'
         );
-
 
     const empty =
       document
@@ -1693,10 +1560,8 @@
           'galleryEmpty'
         );
 
-
     loading.style.display =
       'none';
-
 
     if (
       !images
@@ -1706,21 +1571,15 @@
       0
     ) {
 
-
       empty.style.display =
         'block';
 
-
       return;
-
 
     }
 
-
     images.forEach(
-
       image => {
-
 
         const item =
           document
@@ -1728,10 +1587,8 @@
               'div'
             );
 
-
         item.className =
           'gallery-item';
-
 
         const img =
           document
@@ -1739,89 +1596,54 @@
               'img'
             );
 
-
-        /*
-         * Google Drive
-         * サムネイル表示
-         */
-
         img.src =
-
           'https://drive.google.com/thumbnail'
-
           +
-
           '?id='
-
           +
-
           encodeURIComponent(
             image.id
           )
-
           +
-
           '&sz=w600';
-
 
         img.loading =
           'lazy';
 
-
         img.onclick =
           () => {
 
-
             openImageModal(
-
               'https://drive.google.com/thumbnail'
-
               +
-
               '?id='
-
               +
-
               encodeURIComponent(
                 image.id
               )
-
               +
-
               '&sz=w2000'
-
             );
 
-
           };
-
 
         item.appendChild(
           img
         );
 
-
         grid.appendChild(
           item
         );
 
-
       }
-
     );
 
   }
 
 
-/* ==================================================
-   モーダル
-================================================== */
-
-
   function openImageModal(
     imageUrl
   ) {
-
 
     document
       .getElementById(
@@ -1829,7 +1651,6 @@
       )
       .src =
       imageUrl;
-
 
     document
       .getElementById(
@@ -1845,7 +1666,6 @@
 
   function closeImageModal() {
 
-
     document
       .getElementById(
         'imageModal'
@@ -1855,7 +1675,6 @@
         'active'
       );
 
-
   }
 
 
@@ -1863,34 +1682,23 @@
     event
   ) {
 
-
     if (
       event.target.id
       ===
       'imageModal'
     ) {
 
-
       closeImageModal();
 
-
     }
-
 
   }
 
 
-/* ==================================================
-   リセット
-================================================== */
-
-
   function resetApp() {
-
 
     selectedFiles =
       [];
-
 
     document
       .getElementById(
@@ -1898,7 +1706,6 @@
       )
       .innerHTML =
       '';
-
 
     document
       .getElementById(
@@ -1908,14 +1715,12 @@
       .width =
       '0%';
 
-
     document
       .getElementById(
         'progressText'
       )
       .textContent =
       '0%';
-
 
     document
       .getElementById(
@@ -1924,11 +1729,9 @@
       .textContent =
       '0枚中 0枚完了';
 
-
     showScreen(
       'selectScreen'
     );
-
 
   }
 
