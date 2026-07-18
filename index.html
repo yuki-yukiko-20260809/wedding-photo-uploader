@@ -758,6 +758,8 @@ body:has(#selectScreen.active) {
   outline: 3px solid rgba(160, 125, 78, 0.65);
   outline-offset: 2px;
 }
+
+
 /* =========================================
    ギャラリー右上ダウンロードアイコン
 ========================================= */
@@ -770,24 +772,16 @@ body:has(#selectScreen.active) {
 
 .gallery-download-icon {
   position: absolute;
-
   top: 0;
   right: 0;
 
   width: 44px;
   height: 44px;
-
   padding: 0;
 
   border: none;
-  border-radius: 50%;
-
+  border-radius: 0;
   background: transparent;
-
-  color: #111;
-
-  font-size: 28px;
-  line-height: 1;
 
   display: flex;
   align-items: center;
@@ -795,6 +789,14 @@ body:has(#selectScreen.active) {
 
   cursor: pointer;
 }
+
+.gallery-download-icon img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  display: block;
+}
+
   
 </style>
 
