@@ -12,6 +12,7 @@
 
 <title>Wedding Photo & Video Uploader</title>
 
+
 <style>
 
 * {
@@ -20,6 +21,7 @@
 
 body {
   margin: 0;
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -27,87 +29,132 @@ body {
     "Hiragino Kaku Gothic ProN",
     "Yu Gothic",
     sans-serif;
+
   background: #f8f6f1;
+
   color: #111;
 }
 
+
 .container {
   max-width: 500px;
+
   min-height: 100vh;
+
   margin: 0 auto;
+
   padding: 40px 24px;
+
   display: flex;
+
   flex-direction: column;
+
   justify-content: center;
 }
 
+
 .screen {
   display: none;
+
   text-align: center;
 }
+
 
 .screen.active {
   display: block;
 }
+
 
 h1 {
   font-family:
     Georgia,
     "Times New Roman",
     serif;
+
   font-size: 30px;
+
   font-weight: normal;
+
   letter-spacing: 1px;
+
   line-height: 1.2;
+
   margin: 0 0 20px;
 }
 
+
 .line {
   width: 32px;
+
   height: 1px;
+
   background: #111;
+
   margin: 20px auto 32px;
 }
 
+
 p {
   font-size: 15px;
+
   line-height: 1.8;
+
   margin-bottom: 30px;
 }
 
+
 button {
   width: 100%;
+
   border: none;
+
   border-radius: 8px;
+
   padding: 17px 20px;
+
   font-size: 16px;
+
   cursor: pointer;
 }
 
+
 .primary {
   background: #111;
+
   color: #fff;
 }
+
 
 .video-button {
   margin-top: 12px;
+
   background: #444;
+
   color: #fff;
 }
 
+
 .secondary {
   margin-top: 12px;
+
   background: transparent;
+
   color: #111;
+
   border: 1px solid #111;
 }
 
+
 .note {
   font-size: 12px;
+
   margin-top: 18px;
+
   color: #666;
+
   line-height: 1.8;
 }
+
 
 #photoInput,
 #videoInput {
@@ -115,39 +162,58 @@ button {
 }
 
 
-/* =========================
+/* =========================================
    選択メディア
-========================= */
+========================================= */
+
 
 .media-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
   gap: 8px;
+
   margin: 24px 0;
 }
 
+
 .media-item {
   position: relative;
+
   aspect-ratio: 1 / 1;
+
   overflow: hidden;
+
   border-radius: 6px;
+
   background: #ddd;
 }
+
 
 .media-item img,
 .media-item video {
   width: 100%;
+
   height: 100%;
+
   object-fit: cover;
 }
 
+
 .video-mark {
   position: absolute;
+
   top: 50%;
+
   left: 50%;
-  transform: translate(-50%, -50%);
+
+  transform:
+    translate(-50%, -50%);
 
   width: 42px;
+
   height: 42px;
 
   border-radius: 50%;
@@ -158,7 +224,9 @@ button {
   color: #fff;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   font-size: 20px;
@@ -166,12 +234,16 @@ button {
   pointer-events: none;
 }
 
+
 .delete-btn {
   position: absolute;
+
   top: 4px;
+
   right: 4px;
 
   width: 28px;
+
   height: 28px;
 
   padding: 0;
@@ -188,109 +260,151 @@ button {
   z-index: 10;
 }
 
+
 .count {
   margin: 12px 0;
+
   font-size: 14px;
 }
 
 
-/* =========================
+/* =========================================
    アップロード
-========================= */
+========================================= */
+
 
 .upload-icon {
   font-size: 60px;
+
   margin: 30px 0;
 }
+
 
 .progress-area {
   margin: 30px 0;
 }
 
+
 .progress-bar {
   width: 100%;
+
   height: 10px;
 
   background: #ddd;
 
   border-radius: 10px;
+
   overflow: hidden;
 }
 
+
 .progress {
   width: 0%;
+
   height: 100%;
 
   background: #111;
 
-  transition: width 0.2s ease;
+  transition:
+    width 0.2s ease;
 }
+
 
 .progress-text {
   margin-top: 15px;
+
   font-size: 18px;
 }
 
+
 .progress-size {
   margin-top: 8px;
+
   font-size: 13px;
+
   color: #666;
 }
 
+
 .upload-status {
   margin-top: 12px;
+
   font-size: 14px;
 }
+
 
 .heart {
   font-size: 60px;
+
   margin: 30px 0;
 }
 
+
 .error {
   color: #b00020;
+
   font-size: 14px;
+
   margin-top: 20px;
+
   line-height: 1.7;
 }
 
 
-/* =========================
+/* =========================================
    ギャラリー
-========================= */
+========================================= */
+
 
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
   gap: 4px;
+
   margin: 24px 0;
 }
 
+
 .gallery-item {
   position: relative;
+
   aspect-ratio: 1 / 1;
+
   overflow: hidden;
+
   background: #eee;
 }
+
 
 .gallery-item img,
 .gallery-item video {
   width: 100%;
+
   height: 100%;
+
   object-fit: cover;
+
   display: block;
+
   cursor: pointer;
 }
 
+
 .gallery-video-icon {
   position: absolute;
+
   top: 50%;
+
   left: 50%;
 
   transform:
     translate(-50%, -50%);
 
   width: 44px;
+
   height: 44px;
 
   border-radius: 50%;
@@ -301,7 +415,9 @@ button {
   color: white;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   font-size: 20px;
@@ -309,13 +425,16 @@ button {
   pointer-events: none;
 }
 
+
 .gallery-delete {
   position: absolute;
 
   top: 5px;
+
   right: 5px;
 
   width: 30px;
+
   height: 30px;
 
   padding: 0;
@@ -329,20 +448,140 @@ button {
 
   font-size: 16px;
 
-  z-index: 10;
+  z-index: 20;
 }
+
 
 .gallery-loading,
 .gallery-empty {
   padding: 50px 0;
+
   font-size: 14px;
+
   color: #666;
 }
 
 
-/* =========================
+/* =========================================
+   ダウンロード選択モード
+========================================= */
+
+
+.gallery-item.selection-mode {
+  cursor: pointer;
+}
+
+
+.gallery-item.selection-mode::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    rgba(0, 0, 0, 0.12);
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+
+.gallery-item.selected::after {
+  background:
+    rgba(0, 0, 0, 0.4);
+}
+
+
+.selection-check {
+  display: none;
+
+  position: absolute;
+
+  top: 7px;
+
+  left: 7px;
+
+  width: 28px;
+
+  height: 28px;
+
+  border-radius: 50%;
+
+  border: 2px solid #fff;
+
+  background:
+    rgba(0, 0, 0, 0.45);
+
+  color: #fff;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 17px;
+
+  font-weight: bold;
+
+  z-index: 15;
+}
+
+
+.gallery-item.selection-mode
+.selection-check {
+  display: flex;
+}
+
+
+.gallery-item.selected
+.selection-check {
+  background: #111;
+}
+
+
+.download-panel {
+  display: none;
+
+  margin-top: 16px;
+
+  padding: 16px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 8px;
+
+  background: #fff;
+}
+
+
+.download-panel.active {
+  display: block;
+}
+
+
+.download-count {
+  margin-bottom: 12px;
+
+  font-size: 14px;
+
+  font-weight: 500;
+}
+
+
+.download-progress {
+  margin-top: 12px;
+
+  font-size: 13px;
+
+  color: #666;
+}
+
+
+/* =========================================
    モーダル
-========================= */
+========================================= */
+
 
 .modal {
   display: none;
@@ -354,39 +593,52 @@ button {
   inset: 0;
 
   width: 100%;
+
   height: 100%;
 
   background:
     rgba(0, 0, 0, 0.95);
 
   align-items: center;
+
   justify-content: center;
 }
+
 
 .modal.active {
   display: flex;
 }
 
+
 .modal img {
   max-width: 95%;
+
   max-height: 90%;
+
   object-fit: contain;
 }
 
+
 .modal video {
   width: 95%;
+
   max-width: 900px;
+
   max-height: 85vh;
+
   background: #000;
 }
+
 
 .modal-close {
   position: absolute;
 
   top: 20px;
+
   right: 20px;
 
   width: 44px;
+
   height: 44px;
 
   padding: 0;
@@ -394,6 +646,7 @@ button {
   border-radius: 50%;
 
   background: #fff;
+
   color: #000;
 
   font-size: 25px;
@@ -412,9 +665,9 @@ button {
 <div class="container">
 
 
-<!-- =========================
+<!-- =========================================
      トップ
-========================= -->
+========================================= -->
 
 <section
   id="selectScreen"
@@ -426,7 +679,9 @@ SHARE<br>
 YOUR MOMENTS
 </h1>
 
+
 <div class="line"></div>
+
 
 <p>
 今日撮影した写真や動画を<br>
@@ -490,9 +745,10 @@ YOUR MOMENTS
 </section>
 
 
-<!-- =========================
+
+<!-- =========================================
      確認
-========================= -->
+========================================= -->
 
 <section
   id="confirmScreen"
@@ -504,7 +760,9 @@ CHECK<br>
 YOUR MOMENTS
 </h1>
 
+
 <div class="line"></div>
+
 
 <p>
 選択した写真・動画を確認してください
@@ -546,9 +804,10 @@ YOUR MOMENTS
 </section>
 
 
-<!-- =========================
+
+<!-- =========================================
      アップロード中
-========================= -->
+========================================= -->
 
 <section
   id="uploadScreen"
@@ -559,7 +818,9 @@ YOUR MOMENTS
 UPLOADING
 </h1>
 
+
 <div class="line"></div>
+
 
 <p>
 アップロード中です
@@ -572,6 +833,7 @@ UPLOADING
 
 
 <div class="progress-area">
+
 
 <div class="progress-bar">
 
@@ -615,6 +877,7 @@ UPLOADING
 準備しています...
 </div>
 
+
 </div>
 
 
@@ -633,9 +896,10 @@ UPLOADING
 </section>
 
 
-<!-- =========================
+
+<!-- =========================================
      完了
-========================= -->
+========================================= -->
 
 <section
   id="completeScreen"
@@ -647,7 +911,9 @@ UPLOAD<br>
 COMPLETE!
 </h1>
 
+
 <div class="line"></div>
+
 
 <p>
 写真・動画を送信しました
@@ -683,9 +949,10 @@ COMPLETE!
 </section>
 
 
-<!-- =========================
+
+<!-- =========================================
      ギャラリー
-========================= -->
+========================================= -->
 
 <section
   id="galleryScreen"
@@ -697,11 +964,60 @@ OUR<br>
 GALLERY
 </h1>
 
+
 <div class="line"></div>
+
 
 <p>
 みんなが撮影した写真・動画
 </p>
+
+
+<button
+  id="selectionButton"
+  class="secondary"
+  onclick="toggleSelectionMode()"
+>
+選択してダウンロード
+</button>
+
+
+<div
+  id="downloadPanel"
+  class="download-panel"
+>
+
+<div
+  id="downloadCount"
+  class="download-count"
+>
+0件選択中
+</div>
+
+
+<button
+  class="primary"
+  onclick="downloadSelectedMedia()"
+>
+選択したものをダウンロード
+</button>
+
+
+<button
+  class="secondary"
+  onclick="cancelSelectionMode()"
+>
+キャンセル
+</button>
+
+
+<div
+  id="downloadProgress"
+  class="download-progress"
+>
+</div>
+
+</div>
 
 
 <div
@@ -743,12 +1059,17 @@ GALLERY
 </div>
 
 
-<!-- 写真モーダル -->
+
+<!-- =========================================
+     写真モーダル
+========================================= -->
 
 <div
   id="imageModal"
   class="modal"
-  onclick="closeImageModalBackground(event)"
+  onclick="
+    closeImageModalBackground(event)
+  "
 >
 
 <button
@@ -767,7 +1088,10 @@ GALLERY
 </div>
 
 
-<!-- 動画モーダル -->
+
+<!-- =========================================
+     動画モーダル
+========================================= -->
 
 <div
   id="videoModal"
@@ -781,6 +1105,7 @@ GALLERY
 ×
 </button>
 
+
 <video
   id="videoPlayer"
   controls
@@ -792,12 +1117,13 @@ GALLERY
 </div>
 
 
+
 <script>
 
 
-/* ==================================================
+/* =========================================================
    API設定
-================================================== */
+========================================================= */
 
 
 const APPS_SCRIPT_URL =
@@ -808,9 +1134,10 @@ const WORKER_URL =
   'https://wedding-media-api.youkey-nakatani.workers.dev';
 
 
-/* ==================================================
+
+/* =========================================================
    制限
-================================================== */
+========================================================= */
 
 
 const MAX_PHOTOS =
@@ -830,8 +1157,8 @@ const VIDEO_MAX_BYTES =
 
 
 /*
- * R2 multipart
- * 25 MiB
+ * R2 Multipart
+ * 25MiB
  */
 const VIDEO_CHUNK_SIZE =
   25
@@ -842,15 +1169,16 @@ const VIDEO_CHUNK_SIZE =
 
 
 /*
- * 写真は3枚並列
+ * 写真3枚並列
  */
 const PHOTO_PARALLEL_UPLOADS =
   3;
 
 
-/* ==================================================
-   選択ファイル
-================================================== */
+
+/* =========================================================
+   状態
+========================================================= */
 
 
 let selectedPhotos =
@@ -861,26 +1189,42 @@ let selectedVideos =
   [];
 
 
-/* ==================================================
+let currentGalleryMedia =
+  [];
+
+
+let selectionMode =
+  false;
+
+
+const selectedDownloadItems =
+  new Set();
+
+
+
+/* =========================================================
    投稿者ID
-================================================== */
+========================================================= */
 
 
 function getUploaderId() {
+
 
   const storageKey =
     'weddingUploaderId';
 
 
   let uploaderId =
-    localStorage.getItem(
-      storageKey
-    );
+    localStorage
+      .getItem(
+        storageKey
+      );
 
 
   if (
     !uploaderId
   ) {
+
 
     uploaderId =
 
@@ -898,13 +1242,20 @@ function getUploaderId() {
 
       Math.random()
         .toString(36)
-        .substring(2, 12);
+        .substring(
+          2,
+          12
+        );
 
 
-    localStorage.setItem(
-      storageKey,
-      uploaderId
-    );
+    localStorage
+      .setItem(
+
+        storageKey,
+
+        uploaderId
+
+      );
 
   }
 
@@ -918,30 +1269,43 @@ const UPLOADER_ID =
   getUploaderId();
 
 
-/* ==================================================
+
+/* =========================================================
    ファイル選択
-================================================== */
+========================================================= */
 
 
 document
-  .getElementById('photoInput')
+  .getElementById(
+    'photoInput'
+  )
   .addEventListener(
+
     'change',
+
     handlePhotoSelect
+
   );
 
 
 document
-  .getElementById('videoInput')
+  .getElementById(
+    'videoInput'
+  )
   .addEventListener(
+
     'change',
+
     handleVideoSelect
+
   );
+
 
 
 function handlePhotoSelect(
   event
 ) {
+
 
   const files =
     Array.from(
@@ -952,11 +1316,16 @@ function handlePhotoSelect(
   files.forEach(
     file => {
 
+
       if (
         !file.type
-          .startsWith('image/')
+          .startsWith(
+            'image/'
+          )
       ) {
+
         return;
+
       }
 
 
@@ -966,11 +1335,14 @@ function handlePhotoSelect(
         MAX_PHOTOS
       ) {
 
+
         selectedPhotos.push(
           file
         );
 
+
       }
+
 
     }
   );
@@ -985,9 +1357,11 @@ function handlePhotoSelect(
 }
 
 
+
 function handleVideoSelect(
   event
 ) {
+
 
   const files =
     Array.from(
@@ -1002,11 +1376,16 @@ function handleVideoSelect(
   files.forEach(
     file => {
 
+
       if (
         !file.type
-          .startsWith('video/')
+          .startsWith(
+            'video/'
+          )
       ) {
+
         return;
+
       }
 
 
@@ -1016,8 +1395,10 @@ function handleVideoSelect(
         VIDEO_MAX_BYTES
       ) {
 
+
         sizeError =
           true;
+
 
         return;
 
@@ -1030,11 +1411,14 @@ function handleVideoSelect(
         MAX_VIDEOS
       ) {
 
+
         selectedVideos.push(
           file
         );
 
+
       }
+
 
     }
   );
@@ -1048,9 +1432,11 @@ function handleVideoSelect(
     sizeError
   ) {
 
+
     alert(
       '500MBを超える動画はアップロードできません。'
     );
+
 
   }
 
@@ -1060,22 +1446,30 @@ function handleVideoSelect(
 }
 
 
-/* ==================================================
-   プレビュー
-================================================== */
+
+/* =========================================================
+   選択プレビュー
+========================================================= */
 
 
 function renderPreview() {
 
+
   if (
+
     selectedPhotos.length === 0
+
     &&
+
     selectedVideos.length === 0
+
   ) {
+
 
     showScreen(
       'selectScreen'
     );
+
 
     return;
 
@@ -1104,6 +1498,7 @@ function renderPreview() {
       index
     ) => {
 
+
       const item =
         document
           .createElement(
@@ -1123,23 +1518,32 @@ function renderPreview() {
 
 
       img.src =
-        URL.createObjectURL(
-          file
-        );
+        URL
+          .createObjectURL(
+            file
+          );
 
 
       const deleteButton =
         createPreviewDeleteButton(
+
           () => {
 
+
             selectedPhotos.splice(
+
               index,
+
               1
+
             );
+
 
             renderPreview();
 
+
           }
+
         );
 
 
@@ -1157,6 +1561,7 @@ function renderPreview() {
         item
       );
 
+
     }
 
   );
@@ -1172,6 +1577,7 @@ function renderPreview() {
       file,
       index
     ) => {
+
 
       const item =
         document
@@ -1192,9 +1598,10 @@ function renderPreview() {
 
 
       video.src =
-        URL.createObjectURL(
-          file
-        );
+        URL
+          .createObjectURL(
+            file
+          );
 
 
       video.muted =
@@ -1226,16 +1633,24 @@ function renderPreview() {
 
       const deleteButton =
         createPreviewDeleteButton(
+
           () => {
 
+
             selectedVideos.splice(
+
               index,
+
               1
+
             );
+
 
             renderPreview();
 
+
           }
+
         );
 
 
@@ -1257,6 +1672,7 @@ function renderPreview() {
       grid.appendChild(
         item
       );
+
 
     }
 
@@ -1295,9 +1711,11 @@ function renderPreview() {
 }
 
 
+
 function createPreviewDeleteButton(
   callback
 ) {
+
 
   const button =
     document
@@ -1323,21 +1741,25 @@ function createPreviewDeleteButton(
 }
 
 
-/* ==================================================
+
+/* =========================================================
    画面切替
-================================================== */
+========================================================= */
 
 
 function showScreen(
   screenId
 ) {
 
+
   document
     .querySelectorAll(
       '.screen'
     )
     .forEach(
+
       screen => {
+
 
         screen
           .classList
@@ -1345,7 +1767,9 @@ function showScreen(
             'active'
           );
 
+
       }
+
     );
 
 
@@ -1367,17 +1791,22 @@ function showScreen(
 }
 
 
-/* ==================================================
-   アップロード開始
-================================================== */
+
+/* =========================================================
+   アップロード
+========================================================= */
 
 
 async function startUpload() {
 
+
   const allFiles =
     [
+
       ...selectedPhotos,
+
       ...selectedVideos
+
     ];
 
 
@@ -1386,9 +1815,12 @@ async function startUpload() {
 
 
   if (
-    totalCount === 0
+    totalCount ===
+    0
   ) {
+
     return;
+
   }
 
 
@@ -1405,43 +1837,48 @@ async function startUpload() {
     '';
 
 
-  /*
-   * 全ファイル容量
-   */
   const totalBytes =
-    allFiles.reduce(
-      (
-        sum,
-        file
-      ) => {
+    allFiles
+      .reduce(
 
-        return (
-          sum
-          +
-          file.size
-        );
+        (
+          sum,
+          file
+        ) => {
 
-      },
-      0
-    );
+          return (
+            sum
+            +
+            file.size
+          );
+
+        },
+
+        0
+
+      );
 
 
-  /*
-   * 各ファイルの進捗バイト数
-   */
   const progressMap =
     new Map();
 
 
   allFiles.forEach(
+
     file => {
 
+
       progressMap.set(
+
         file,
+
         0
+
       );
 
+
     }
+
   );
 
 
@@ -1449,36 +1886,57 @@ async function startUpload() {
     0;
 
 
+
   function updateOverallProgress() {
+
 
     let uploadedBytes =
       0;
 
 
     progressMap.forEach(
+
       value => {
+
 
         uploadedBytes +=
           value;
 
+
       }
+
     );
 
 
     const percent =
+
+      totalBytes > 0
+
+      ?
+
       Math.min(
 
         99,
 
         Math.round(
+
           uploadedBytes
+
           /
+
           totalBytes
+
           *
+
           100
+
         )
 
-      );
+      )
+
+      :
+
+      0;
 
 
     document
@@ -1487,8 +1945,11 @@ async function startUpload() {
       )
       .style
       .width =
+
       percent
+
       +
+
       '%';
 
 
@@ -1497,8 +1958,11 @@ async function startUpload() {
         'progressText'
       )
       .textContent =
+
       percent
+
       +
+
       '%';
 
 
@@ -1553,11 +2017,8 @@ async function startUpload() {
 
 
     /*
-     * ==============================
-     * 写真アップロード
-     * ==============================
+     * 写真
      */
-
 
     if (
       selectedPhotos.length
@@ -1582,9 +2043,12 @@ async function startUpload() {
 
         () => {
 
+
           completedCount++;
 
+
           updateOverallProgress();
+
 
         },
 
@@ -1597,11 +2061,8 @@ async function startUpload() {
 
 
     /*
-     * ==============================
-     * 動画アップロード
-     * ==============================
+     * 動画
      */
-
 
     for (
       const video
@@ -1623,26 +2084,124 @@ async function startUpload() {
         video.name;
 
 
-      await uploadVideoMultipart(
+      /*
+       * 動画サムネイル生成
+       *
+       * 失敗しても
+       * 動画アップロードは継続
+       */
 
-        video,
+      let thumbnailBlob =
+        null;
 
-        bytesUploaded => {
 
-          progressMap.set(
+      try {
 
-            video,
 
-            bytesUploaded
+        thumbnailBlob =
+          await createVideoThumbnail(
+            video
+          );
+
+
+      } catch (
+        error
+      ) {
+
+
+        console.warn(
+
+          'Thumbnail generation failed',
+
+          error
+
+        );
+
+
+      }
+
+
+      /*
+       * 動画本体アップロード
+       */
+
+      const uploadResult =
+        await uploadVideoMultipart(
+
+          video,
+
+          bytesUploaded => {
+
+
+            progressMap.set(
+
+              video,
+
+              bytesUploaded
+
+            );
+
+
+            updateOverallProgress();
+
+
+          }
+
+        );
+
+
+      /*
+       * サムネイルをR2へ送信
+       */
+
+      if (
+        thumbnailBlob
+        &&
+        uploadResult
+        &&
+        uploadResult.key
+      ) {
+
+
+        try {
+
+
+          document
+            .getElementById(
+              'uploadStatus'
+            )
+            .textContent =
+
+            '動画のサムネイルを作成しています...';
+
+
+          await uploadThumbnail(
+
+            uploadResult.key,
+
+            thumbnailBlob
 
           );
 
 
-          updateOverallProgress();
+        } catch (
+          error
+        ) {
+
+
+          console.warn(
+
+            'Thumbnail upload failed',
+
+            error
+
+          );
+
 
         }
 
-      );
+
+      }
 
 
       progressMap.set(
@@ -1666,7 +2225,6 @@ async function startUpload() {
     /*
      * 完了
      */
-
 
     document
       .getElementById(
@@ -1760,7 +2318,6 @@ async function startUpload() {
         'errorMessage'
       )
       .textContent =
-
       'アップロードに失敗しました。通信環境を確認して、もう一度お試しください。';
 
 
@@ -1777,9 +2334,10 @@ async function startUpload() {
 }
 
 
-/* ==================================================
+
+/* =========================================================
    写真：3枚並列
-================================================== */
+========================================================= */
 
 
 async function uploadPhotos(
@@ -1831,10 +2389,6 @@ async function uploadPhotos(
         ];
 
 
-      /*
-       * 写真はApps Scriptのno-corsなので
-       * 疑似進捗
-       */
       const fakeController =
         startPhotoFakeProgress(
 
@@ -1916,9 +2470,15 @@ async function uploadPhotos(
 
 
   for (
-    let i = 0;
-    i < count;
+
+    let i =
+      0;
+
+    i <
+    count;
+
     i++
+
   ) {
 
 
@@ -1937,9 +2497,10 @@ async function uploadPhotos(
 }
 
 
-/* ==================================================
-   写真 疑似進捗
-================================================== */
+
+/* =========================================================
+   写真疑似進捗
+========================================================= */
 
 
 function startPhotoFakeProgress(
@@ -1970,13 +2531,18 @@ function startPhotoFakeProgress(
         if (
           stopped
         ) {
+
           return;
+
         }
 
 
         const remaining =
+
           0.95
+
           -
+
           currentRatio;
 
 
@@ -2028,6 +2594,7 @@ function startPhotoFakeProgress(
 
     stop() {
 
+
       stopped =
         true;
 
@@ -2036,6 +2603,7 @@ function startPhotoFakeProgress(
         timer
       );
 
+
     }
 
   };
@@ -2043,9 +2611,10 @@ function startPhotoFakeProgress(
 }
 
 
-/* ==================================================
+
+/* =========================================================
    写真 → Apps Script
-================================================== */
+========================================================= */
 
 
 function fileToBase64(
@@ -2095,6 +2664,7 @@ function fileToBase64(
   );
 
 }
+
 
 
 async function uploadPhotoToAppsScript(
@@ -2171,9 +2741,10 @@ async function uploadPhotoToAppsScript(
 }
 
 
-/* ==================================================
-   動画 → R2 Multipart Upload
-================================================== */
+
+/* =========================================================
+   動画 Multipart Upload
+========================================================= */
 
 
 async function uploadVideoMultipart(
@@ -2185,16 +2756,13 @@ async function uploadVideoMultipart(
 ) {
 
 
-  /*
-   * Multipart開始
-   */
-
-
   const createResponse =
     await fetch(
 
       WORKER_URL
+
       +
+
       '/multipart/create',
 
       {
@@ -2245,7 +2813,8 @@ async function uploadVideoMultipart(
 
 
   const createResult =
-    await createResponse.json();
+    await createResponse
+      .json();
 
 
   const key =
@@ -2273,12 +2842,14 @@ async function uploadVideoMultipart(
 
     for (
 
-      let start = 0;
+      let start =
+        0;
 
-      start < file.size;
+      start <
+      file.size;
 
       start +=
-        VIDEO_CHUNK_SIZE
+      VIDEO_CHUNK_SIZE
 
     ) {
 
@@ -2287,7 +2858,9 @@ async function uploadVideoMultipart(
         Math.min(
 
           start
+
           +
+
           VIDEO_CHUNK_SIZE,
 
           file.size
@@ -2303,12 +2876,6 @@ async function uploadVideoMultipart(
           end
 
         );
-
-
-      /*
-       * 実際のアップロード量を
-       * XHR progressで取得
-       */
 
 
       const uploadedPart =
@@ -2357,9 +2924,7 @@ async function uploadVideoMultipart(
 
 
       onProgress(
-
         uploadedBeforeCurrentPart
-
       );
 
 
@@ -2369,16 +2934,13 @@ async function uploadVideoMultipart(
     }
 
 
-    /*
-     * Multipart完了
-     */
-
-
     const completeResponse =
       await fetch(
 
         WORKER_URL
+
         +
+
         '/multipart/complete',
 
         {
@@ -2425,19 +2987,13 @@ async function uploadVideoMultipart(
     }
 
 
-    return await
-      completeResponse
-        .json();
+    return await completeResponse
+      .json();
 
 
   } catch (
     error
   ) {
-
-
-    /*
-     * 失敗したmultipartを中断
-     */
 
 
     try {
@@ -2446,7 +3002,9 @@ async function uploadVideoMultipart(
       await fetch(
 
         WORKER_URL
+
         +
+
         '/multipart/abort',
 
         {
@@ -2498,10 +3056,10 @@ async function uploadVideoMultipart(
 }
 
 
-/* ==================================================
+
+/* =========================================================
    動画 Part Upload
-   本当のリアルタイム進捗
-================================================== */
+========================================================= */
 
 
 function uploadVideoPart(
@@ -2579,12 +3137,8 @@ function uploadVideoPart(
       );
 
 
-      /*
-       * 実アップロード進捗
-       */
-
-
-      xhr.upload.onprogress =
+      xhr.upload
+        .onprogress =
         event => {
 
 
@@ -2594,9 +3148,7 @@ function uploadVideoPart(
 
 
             onProgress(
-
               event.loaded
-
             );
 
 
@@ -2612,11 +3164,15 @@ function uploadVideoPart(
 
           if (
 
-            xhr.status >= 200
+            xhr.status
+            >=
+            200
 
             &&
 
-            xhr.status < 300
+            xhr.status
+            <
+            300
 
           ) {
 
@@ -2698,12 +3254,374 @@ function uploadVideoPart(
 }
 
 
-/* ==================================================
+
+/* =========================================================
+   動画サムネイル生成
+========================================================= */
+
+
+function createVideoThumbnail(
+  file
+) {
+
+
+  return new Promise(
+
+    (
+      resolve,
+      reject
+    ) => {
+
+
+      const video =
+        document
+          .createElement(
+            'video'
+          );
+
+
+      const url =
+        URL
+          .createObjectURL(
+            file
+          );
+
+
+      video.src =
+        url;
+
+
+      video.muted =
+        true;
+
+
+      video.playsInline =
+        true;
+
+
+      video.preload =
+        'metadata';
+
+
+      const cleanup =
+        () => {
+
+
+          URL.revokeObjectURL(
+            url
+          );
+
+
+          video.remove();
+
+
+        };
+
+
+      video.onerror =
+        () => {
+
+
+          cleanup();
+
+
+          reject(
+
+            new Error(
+              '動画を読み込めませんでした。'
+            )
+
+          );
+
+
+        };
+
+
+      video.onloadedmetadata =
+        () => {
+
+
+          /*
+           * 1秒付近
+           *
+           * 1秒未満の動画なら
+           * 中間地点
+           */
+
+          const seekTime =
+
+            video.duration
+            >
+            1
+
+            ?
+
+            1
+
+            :
+
+            Math.max(
+
+              0,
+
+              video.duration
+              /
+              2
+
+            );
+
+
+          video.currentTime =
+            seekTime;
+
+
+        };
+
+
+      video.onseeked =
+        () => {
+
+
+          try {
+
+
+            const canvas =
+              document
+                .createElement(
+                  'canvas'
+                );
+
+
+            const maxWidth =
+              640;
+
+
+            const ratio =
+
+              video.videoWidth
+              >
+              maxWidth
+
+              ?
+
+              maxWidth
+              /
+              video.videoWidth
+
+              :
+
+              1;
+
+
+            canvas.width =
+              Math.max(
+
+                1,
+
+                Math.round(
+
+                  video.videoWidth
+
+                  *
+
+                  ratio
+
+                )
+
+              );
+
+
+            canvas.height =
+              Math.max(
+
+                1,
+
+                Math.round(
+
+                  video.videoHeight
+
+                  *
+
+                  ratio
+
+                )
+
+              );
+
+
+            const context =
+              canvas
+                .getContext(
+                  '2d'
+                );
+
+
+            context.drawImage(
+
+              video,
+
+              0,
+
+              0,
+
+              canvas.width,
+
+              canvas.height
+
+            );
+
+
+            canvas.toBlob(
+
+              blob => {
+
+
+                cleanup();
+
+
+                if (
+                  blob
+                ) {
+
+
+                  resolve(
+                    blob
+                  );
+
+
+                } else {
+
+
+                  reject(
+
+                    new Error(
+                      'サムネイル生成に失敗しました。'
+                    )
+
+                  );
+
+
+                }
+
+
+              },
+
+              'image/jpeg',
+
+              0.82
+
+            );
+
+
+          } catch (
+            error
+          ) {
+
+
+            cleanup();
+
+
+            reject(
+              error
+            );
+
+
+          }
+
+
+        };
+
+
+    }
+
+  );
+
+}
+
+
+
+/* =========================================================
+   サムネイルアップロード
+========================================================= */
+
+
+async function uploadThumbnail(
+
+  videoKey,
+
+  thumbnailBlob
+
+) {
+
+
+  const response =
+    await fetch(
+
+      WORKER_URL
+
+      +
+
+      '/thumbnail'
+
+      +
+
+      '?key='
+
+      +
+
+      encodeURIComponent(
+        videoKey
+      ),
+
+      {
+
+        method:
+          'POST',
+
+        headers: {
+
+          'Content-Type':
+            'image/jpeg'
+
+        },
+
+        body:
+          thumbnailBlob
+
+      }
+
+    );
+
+
+  if (
+    !response.ok
+  ) {
+
+
+    throw new Error(
+      'Thumbnail upload failed'
+    );
+
+
+  }
+
+
+  return await response
+    .json();
+
+}
+
+
+
+/* =========================================================
    ギャラリー
-================================================== */
+========================================================= */
 
 
 async function openGallery() {
+
+
+  cancelSelectionMode();
 
 
   showScreen(
@@ -2765,20 +3683,21 @@ async function openGallery() {
       results[1];
 
 
-    const media =
-
+    currentGalleryMedia =
       [
+
         ...photos,
+
         ...videos
+
       ]
-
-
       .sort(
 
         (
           a,
           b
         ) => {
+
 
           return (
 
@@ -2790,6 +3709,7 @@ async function openGallery() {
 
           );
 
+
         }
 
       );
@@ -2800,7 +3720,9 @@ async function openGallery() {
 
 
     if (
-      media.length === 0
+      currentGalleryMedia.length
+      ===
+      0
     ) {
 
 
@@ -2810,12 +3732,11 @@ async function openGallery() {
 
       return;
 
-
     }
 
 
     renderCombinedGallery(
-      media
+      currentGalleryMedia
     );
 
 
@@ -2846,9 +3767,10 @@ async function openGallery() {
 }
 
 
-/* ==================================================
-   Google Drive 写真取得
-================================================== */
+
+/* =========================================================
+   Google Drive写真取得
+========================================================= */
 
 
 function loadDrivePhotos() {
@@ -2868,7 +3790,17 @@ function loadDrivePhotos() {
 
         +
 
-        Date.now();
+        Date.now()
+
+        +
+
+        '_'
+
+        +
+
+        Math.random()
+          .toString(36)
+          .substring(2, 8);
 
 
       window[
@@ -2902,9 +3834,13 @@ function loadDrivePhotos() {
 
 
           if (
+
             !result
+
             ||
+
             !result.success
+
           ) {
 
 
@@ -2915,33 +3851,27 @@ function loadDrivePhotos() {
 
             return;
 
-
           }
-
-
-          /*
-           * Apps Script側に動画が残っていても
-           * imageだけ採用
-           */
 
 
           const photos =
 
             (
               result.media
+
               ||
-              result.images
-              ||
+
               []
             )
-
             .filter(
 
               item => {
 
+
                 return (
 
-                  item.type ===
+                  item.type
+                  ===
                   'image'
 
                   ||
@@ -2957,36 +3887,140 @@ function loadDrivePhotos() {
 
                 );
 
+
               }
 
             )
-
             .map(
 
               item => {
 
+
                 return {
+
+                  uniqueId:
+
+                    'drive:'
+
+                    +
+
+                    item.id,
+
 
                   source:
                     'drive',
 
+
                   type:
                     'image',
+
 
                   id:
                     item.id,
 
+
+                  name:
+                    item.name,
+
+
                   canDelete:
                     item.canDelete,
 
+
                   sortTime:
                     Number(
+
                       item.createdAt
+
                       ||
+
                       0
+
+                    ),
+
+
+                  thumbnailUrl:
+
+                    item.thumbnailUrl
+
+                    ||
+
+                    (
+
+                      'https://drive.google.com/thumbnail'
+
+                      +
+
+                      '?id='
+
+                      +
+
+                      encodeURIComponent(
+                        item.id
+                      )
+
+                      +
+
+                      '&sz=w600'
+
+                    ),
+
+
+                  previewUrl:
+
+                    item.previewUrl
+
+                    ||
+
+                    (
+
+                      'https://drive.google.com/thumbnail'
+
+                      +
+
+                      '?id='
+
+                      +
+
+                      encodeURIComponent(
+                        item.id
+                      )
+
+                      +
+
+                      '&sz=w2000'
+
+                    ),
+
+
+                  downloadUrl:
+
+                    item.downloadUrl
+
+                    ||
+
+                    (
+
+                      'https://drive.google.com/uc'
+
+                      +
+
+                      '?export=download'
+
+                      +
+
+                      '&id='
+
+                      +
+
+                      encodeURIComponent(
+                        item.id
+                      )
+
                     )
 
                 };
+
 
               }
 
@@ -3086,9 +4120,10 @@ function loadDrivePhotos() {
 }
 
 
-/* ==================================================
-   R2 動画取得
-================================================== */
+
+/* =========================================================
+   R2動画取得
+========================================================= */
 
 
 async function loadR2Videos() {
@@ -3130,7 +4165,8 @@ async function loadR2Videos() {
 
 
   const result =
-    await response.json();
+    await response
+      .json();
 
 
   return (
@@ -3148,30 +4184,76 @@ async function loadR2Videos() {
 
       return {
 
+        uniqueId:
+
+          'r2:'
+
+          +
+
+          video.key,
+
+
         source:
           'r2',
+
 
         type:
           'video',
 
+
         key:
           video.key,
+
 
         name:
           video.name,
 
+
+        size:
+          video.size,
+
+
         canDelete:
           video.canDelete,
 
+
+        hasThumbnail:
+          video.hasThumbnail,
+
+
+        thumbnailKey:
+          video.thumbnailKey,
+
+
         sortTime:
+
           new Date(
             video.uploadedAt
           )
-          .getTime()
+            .getTime()
 
           ||
 
-          0
+          0,
+
+
+        downloadUrl:
+
+          WORKER_URL
+
+          +
+
+          '/video/download'
+
+          +
+
+          '?key='
+
+          +
+
+          encodeURIComponent(
+            video.key
+          )
 
       };
 
@@ -3183,9 +4265,10 @@ async function loadR2Videos() {
 }
 
 
-/* ==================================================
+
+/* =========================================================
    ギャラリー描画
-================================================== */
+========================================================= */
 
 
 function renderCombinedGallery(
@@ -3198,6 +4281,10 @@ function renderCombinedGallery(
       .getElementById(
         'galleryGrid'
       );
+
+
+  grid.innerHTML =
+    '';
 
 
   media.forEach(
@@ -3216,10 +4303,38 @@ function renderCombinedGallery(
         'gallery-item';
 
 
+      element.dataset
+        .mediaId =
+        item.uniqueId;
+
+
       /*
-       * Google Drive写真
+       * 選択チェック
        */
 
+      const check =
+        document
+          .createElement(
+            'div'
+          );
+
+
+      check.className =
+        'selection-check';
+
+
+      check.textContent =
+        '✓';
+
+
+      element.appendChild(
+        check
+      );
+
+
+      /*
+       * 写真
+       */
 
       if (
         item.type ===
@@ -3235,22 +4350,7 @@ function renderCombinedGallery(
 
 
         img.src =
-
-          'https://drive.google.com/thumbnail'
-
-          +
-
-          '?id='
-
-          +
-
-          encodeURIComponent(
-            item.id
-          )
-
-          +
-
-          '&sz=w600';
+          item.thumbnailUrl;
 
 
         img.loading =
@@ -3258,27 +4358,29 @@ function renderCombinedGallery(
 
 
         img.onclick =
-          () => {
+          event => {
+
+
+            event.stopPropagation();
+
+
+            if (
+              selectionMode
+            ) {
+
+
+              toggleMediaSelection(
+                item
+              );
+
+
+              return;
+
+            }
 
 
             openImageModal(
-
-              'https://drive.google.com/thumbnail'
-
-              +
-
-              '?id='
-
-              +
-
-              encodeURIComponent(
-                item.id
-              )
-
-              +
-
-              '&sz=w2000'
-
+              item.previewUrl
             );
 
 
@@ -3294,9 +4396,8 @@ function renderCombinedGallery(
 
 
       /*
-       * R2動画
+       * 動画
        */
-
 
       if (
         item.type ===
@@ -3304,59 +4405,166 @@ function renderCombinedGallery(
       ) {
 
 
-        const video =
-          document
-            .createElement(
-              'video'
+        /*
+         * サムネイルあり
+         */
+
+        if (
+          item.hasThumbnail
+          &&
+          item.thumbnailKey
+        ) {
+
+
+          const img =
+            document
+              .createElement(
+                'img'
+              );
+
+
+          img.src =
+
+            WORKER_URL
+
+            +
+
+            '/thumbnail'
+
+            +
+
+            '?key='
+
+            +
+
+            encodeURIComponent(
+              item.thumbnailKey
             );
 
 
-        video.src =
+          img.loading =
+            'lazy';
 
-          WORKER_URL
 
-          +
+          img.onclick =
+            event => {
 
-          '/video'
 
-          +
+              event.stopPropagation();
 
-          '?key='
 
-          +
+              if (
+                selectionMode
+              ) {
 
-          encodeURIComponent(
-            item.key
+
+                toggleMediaSelection(
+                  item
+                );
+
+
+                return;
+
+              }
+
+
+              openVideoModal(
+                item.key
+              );
+
+
+            };
+
+
+          element.appendChild(
+            img
           );
 
 
-        video.muted =
-          true;
+        }
+
+        /*
+         * 既存動画等
+         * サムネイルなし
+         */
+
+        else {
 
 
-        video.playsInline =
-          true;
+          const video =
+            document
+              .createElement(
+                'video'
+              );
 
 
-        video.preload =
-          'metadata';
+          video.src =
 
+            WORKER_URL
 
-        video.onclick =
-          () => {
+            +
 
+            '/video'
 
-            openVideoModal(
+            +
+
+            '?key='
+
+            +
+
+            encodeURIComponent(
               item.key
             );
 
 
-          };
+          video.muted =
+            true;
 
 
-        element.appendChild(
-          video
-        );
+          video.playsInline =
+            true;
+
+
+          video.preload =
+            'metadata';
+
+
+          video.onclick =
+            event => {
+
+
+              event.stopPropagation();
+
+
+              if (
+                selectionMode
+              ) {
+
+
+                toggleMediaSelection(
+                  item
+                );
+
+
+                return;
+
+              }
+
+
+              openVideoModal(
+                item.key
+              );
+
+
+            };
+
+
+          element.appendChild(
+            video
+          );
+
+
+        }
 
 
         const play =
@@ -3383,9 +4591,33 @@ function renderCombinedGallery(
 
 
       /*
-       * 自分の投稿だけ削除
+       * 選択モード時
+       * タイル全体クリック
        */
 
+      element.onclick =
+        () => {
+
+
+          if (
+            selectionMode
+          ) {
+
+
+            toggleMediaSelection(
+              item
+            );
+
+
+          }
+
+
+        };
+
+
+      /*
+       * 削除
+       */
 
       if (
         item.canDelete
@@ -3412,6 +4644,15 @@ function renderCombinedGallery(
 
 
             event.stopPropagation();
+
+
+            if (
+              selectionMode
+            ) {
+
+              return;
+
+            }
 
 
             if (
@@ -3456,12 +4697,482 @@ function renderCombinedGallery(
 
   );
 
+
+  updateGallerySelectionUI();
+
 }
 
 
-/* ==================================================
+
+/* =========================================================
+   ダウンロード選択モード
+========================================================= */
+
+
+function toggleSelectionMode() {
+
+
+  if (
+    selectionMode
+  ) {
+
+
+    cancelSelectionMode();
+
+
+    return;
+
+  }
+
+
+  selectionMode =
+    true;
+
+
+  selectedDownloadItems
+    .clear();
+
+
+  updateGallerySelectionUI();
+
+}
+
+
+
+function cancelSelectionMode() {
+
+
+  selectionMode =
+    false;
+
+
+  selectedDownloadItems
+    .clear();
+
+
+  document
+    .getElementById(
+      'downloadProgress'
+    )
+    .textContent =
+    '';
+
+
+  updateGallerySelectionUI();
+
+}
+
+
+
+function toggleMediaSelection(
+  item
+) {
+
+
+  if (
+    selectedDownloadItems
+      .has(
+        item.uniqueId
+      )
+  ) {
+
+
+    selectedDownloadItems
+      .delete(
+        item.uniqueId
+      );
+
+
+  } else {
+
+
+    selectedDownloadItems
+      .add(
+        item.uniqueId
+      );
+
+
+  }
+
+
+  updateGallerySelectionUI();
+
+}
+
+
+
+function updateGallerySelectionUI() {
+
+
+  const panel =
+    document
+      .getElementById(
+        'downloadPanel'
+      );
+
+
+  const selectionButton =
+    document
+      .getElementById(
+        'selectionButton'
+      );
+
+
+  const count =
+    document
+      .getElementById(
+        'downloadCount'
+      );
+
+
+  if (
+    selectionMode
+  ) {
+
+
+    panel.classList
+      .add(
+        'active'
+      );
+
+
+    selectionButton
+      .textContent =
+      '選択を終了';
+
+
+  } else {
+
+
+    panel.classList
+      .remove(
+        'active'
+      );
+
+
+    selectionButton
+      .textContent =
+      '選択してダウンロード';
+
+
+  }
+
+
+  count.textContent =
+
+    selectedDownloadItems.size
+
+    +
+
+    '件選択中';
+
+
+  document
+    .querySelectorAll(
+      '.gallery-item'
+    )
+    .forEach(
+
+      element => {
+
+
+        const mediaId =
+          element.dataset
+            .mediaId;
+
+
+        if (
+          selectionMode
+        ) {
+
+
+          element.classList
+            .add(
+              'selection-mode'
+            );
+
+
+        } else {
+
+
+          element.classList
+            .remove(
+              'selection-mode'
+            );
+
+
+        }
+
+
+        if (
+          selectedDownloadItems
+            .has(
+              mediaId
+            )
+        ) {
+
+
+          element.classList
+            .add(
+              'selected'
+            );
+
+
+        } else {
+
+
+          element.classList
+            .remove(
+              'selected'
+            );
+
+
+        }
+
+
+        /*
+         * 選択中は削除ボタン非表示
+         */
+
+        const deleteButton =
+          element
+            .querySelector(
+              '.gallery-delete'
+            );
+
+
+        if (
+          deleteButton
+        ) {
+
+
+          deleteButton.style.display =
+
+            selectionMode
+
+            ?
+
+            'none'
+
+            :
+
+            'block';
+
+
+        }
+
+
+      }
+
+    );
+
+}
+
+
+
+/* =========================================================
+   選択したものを順番にダウンロード
+========================================================= */
+
+
+async function downloadSelectedMedia() {
+
+
+  if (
+    selectedDownloadItems.size
+    ===
+    0
+  ) {
+
+
+    alert(
+      'ダウンロードする写真・動画を選択してください。'
+    );
+
+
+    return;
+
+  }
+
+
+  const items =
+
+    currentGalleryMedia
+      .filter(
+
+        item =>
+
+          selectedDownloadItems
+            .has(
+              item.uniqueId
+            )
+
+      );
+
+
+  const progress =
+    document
+      .getElementById(
+        'downloadProgress'
+      );
+
+
+  progress.textContent =
+
+    items.length
+
+    +
+
+    '件のダウンロードを開始します...';
+
+
+  /*
+   * スマホブラウザでは
+   * 複数同時ダウンロードがブロックされやすいため
+   * 1件ずつ順番に実行
+   */
+
+  for (
+
+    let i =
+      0;
+
+    i <
+    items.length;
+
+    i++
+
+  ) {
+
+
+    const item =
+      items[i];
+
+
+    progress.textContent =
+
+      items.length
+
+      +
+
+      '件中 '
+
+      +
+
+      (
+
+        i
+
+        +
+
+        1
+
+      )
+
+      +
+
+      '件をダウンロードしています...';
+
+
+    triggerDownload(
+      item
+    );
+
+
+    /*
+     * 次のダウンロードまで待機
+     */
+
+    await sleep(
+      900
+    );
+
+
+  }
+
+
+  progress.textContent =
+
+    'ダウンロード処理を開始しました。';
+
+
+  /*
+   * ブラウザによっては
+   * 複数ダウンロードの許可確認が表示される
+   */
+
+}
+
+
+
+function triggerDownload(
+  item
+) {
+
+
+  const anchor =
+    document
+      .createElement(
+        'a'
+      );
+
+
+  anchor.href =
+    item.downloadUrl;
+
+
+  /*
+   * download属性は
+   * クロスオリジンでは
+   * 無視される場合がある
+   */
+
+  anchor.download =
+    item.name
+
+    ||
+
+    'wedding-media';
+
+
+  anchor.target =
+    '_blank';
+
+
+  anchor.rel =
+    'noopener';
+
+
+  document.body
+    .appendChild(
+      anchor
+    );
+
+
+  anchor.click();
+
+
+  setTimeout(
+
+    () => {
+
+
+      anchor.remove();
+
+
+    },
+
+    1000
+
+  );
+
+}
+
+
+
+/* =========================================================
    Google Drive写真削除
-================================================== */
+========================================================= */
 
 
 function confirmDeleteDrivePhoto(
@@ -3482,7 +5193,6 @@ function confirmDeleteDrivePhoto(
 
     return;
 
-
   }
 
 
@@ -3492,7 +5202,17 @@ function confirmDeleteDrivePhoto(
 
     +
 
-    Date.now();
+    Date.now()
+
+    +
+
+    '_'
+
+    +
+
+    Math.random()
+      .toString(36)
+      .substring(2, 8);
 
 
   window[
@@ -3526,19 +5246,34 @@ function confirmDeleteDrivePhoto(
 
 
       if (
+
         !result
+
         ||
+
         !result.success
+
       ) {
 
 
         alert(
+
+          result
+          &&
+          result.message
+
+          ?
+
+          result.message
+
+          :
+
           '削除に失敗しました。'
+
         );
 
 
         return;
-
 
       }
 
@@ -3596,7 +5331,15 @@ function confirmDeleteDrivePhoto(
 
     encodeURIComponent(
       callbackName
-    );
+    )
+
+    +
+
+    '&t='
+
+    +
+
+    Date.now();
 
 
   document.body
@@ -3607,9 +5350,10 @@ function confirmDeleteDrivePhoto(
 }
 
 
-/* ==================================================
+
+/* =========================================================
    R2動画削除
-================================================== */
+========================================================= */
 
 
 async function confirmDeleteR2Video(
@@ -3629,7 +5373,6 @@ async function confirmDeleteR2Video(
 
 
     return;
-
 
   }
 
@@ -3675,20 +5418,29 @@ async function confirmDeleteR2Video(
 
 
     const result =
-      await response.json();
+      await response
+        .json();
 
 
     if (
+
       !response.ok
+
       ||
+
       !result.success
+
     ) {
 
 
       throw new Error(
+
         result.message
+
         ||
+
         'Delete failed'
+
       );
 
 
@@ -3718,9 +5470,10 @@ async function confirmDeleteR2Video(
 }
 
 
-/* ==================================================
+
+/* =========================================================
    写真モーダル
-================================================== */
+========================================================= */
 
 
 function openImageModal(
@@ -3748,6 +5501,7 @@ function openImageModal(
 }
 
 
+
 function closeImageModal() {
 
 
@@ -3760,8 +5514,8 @@ function closeImageModal() {
       'active'
     );
 
-
 }
+
 
 
 function closeImageModalBackground(
@@ -3770,7 +5524,8 @@ function closeImageModalBackground(
 
 
   if (
-    event.target.id ===
+    event.target.id
+    ===
     'imageModal'
   ) {
 
@@ -3783,9 +5538,10 @@ function closeImageModalBackground(
 }
 
 
-/* ==================================================
+
+/* =========================================================
    動画モーダル
-================================================== */
+========================================================= */
 
 
 function openVideoModal(
@@ -3834,6 +5590,7 @@ function openVideoModal(
 }
 
 
+
 function closeVideoModal() {
 
 
@@ -3867,9 +5624,10 @@ function closeVideoModal() {
 }
 
 
-/* ==================================================
+
+/* =========================================================
    その他
-================================================== */
+========================================================= */
 
 
 function formatBytes(
@@ -3884,9 +5642,15 @@ function formatBytes(
 
 
     return (
-      bytes
+
+      Math.round(
+        bytes
+      )
+
       +
+
       ' B'
+
     );
 
 
@@ -3894,10 +5658,15 @@ function formatBytes(
 
 
   const mb =
+
     bytes
+
     /
+
     1024
+
     /
+
     1024;
 
 
@@ -3908,10 +5677,16 @@ function formatBytes(
 
 
     return (
+
       mb
-        .toFixed(1)
+        .toFixed(
+          1
+        )
+
       +
+
       ' MB'
+
     );
 
 
@@ -3922,10 +5697,14 @@ function formatBytes(
 
     (
       mb
+
       /
+
       1024
     )
-      .toFixed(2)
+      .toFixed(
+        2
+      )
 
     +
 
@@ -3934,6 +5713,7 @@ function formatBytes(
   );
 
 }
+
 
 
 function sleep(
@@ -3945,16 +5725,27 @@ function sleep(
 
     resolve => {
 
+
       setTimeout(
+
         resolve,
+
         ms
+
       );
+
 
     }
 
   );
 
 }
+
+
+
+/* =========================================================
+   リセット
+========================================================= */
 
 
 function resetApp() {
@@ -4007,6 +5798,22 @@ function resetApp() {
     )
     .textContent =
     '0件中 0件完了';
+
+
+  document
+    .getElementById(
+      'uploadStatus'
+    )
+    .textContent =
+    '準備しています...';
+
+
+  document
+    .getElementById(
+      'errorMessage'
+    )
+    .textContent =
+    '';
 
 
   showScreen(
