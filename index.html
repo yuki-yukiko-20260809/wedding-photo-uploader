@@ -735,78 +735,95 @@ button {
      トップ
 ========================================= -->
 
+<!-- =========================
+     トップ
+========================= -->
+
 <section
   id="selectScreen"
-  class="screen active"
+  class="screen active top-visual"
 >
 
-<h1>
-SHARE<br>
-YOUR MOMENTS
-</h1>
+  <img
+    src="./top-background.png"
+    class="top-background"
+    alt="YUKI & YUKIKO WEDDING PARTY"
+  >
 
 
-<div class="line"></div>
+  <!-- 写真選択 -->
+
+  <input
+    type="file"
+    id="photoInput"
+    accept="image/*"
+    multiple
+  >
 
 
-<p>
-今日撮影した写真や動画を<br>
-ふたりに送ってください
-</p>
+  <!-- 動画選択 -->
+
+  <input
+    type="file"
+    id="videoInput"
+    accept="video/*"
+    multiple
+  >
 
 
-<input
-  type="file"
-  id="photoInput"
-  accept="image/*"
-  multiple
->
+  <!--
+    背景画像内の
+    「写真を選択する」
+    に重なる透明ボタン
+  -->
+
+  <button
+    type="button"
+    class="top-hit-area photo-area"
+    aria-label="写真を選択する"
+    onclick="
+      document
+        .getElementById('photoInput')
+        .click()
+    "
+  >
+  </button>
 
 
-<input
-  type="file"
-  id="videoInput"
-  accept="video/*"
-  multiple
->
+  <!--
+    背景画像内の
+    「動画を選択する」
+    に重なる透明ボタン
+  -->
+
+  <button
+    type="button"
+    class="top-hit-area video-area"
+    aria-label="動画を選択する"
+    onclick="
+      document
+        .getElementById('videoInput')
+        .click()
+    "
+  >
+  </button>
 
 
-<button
-  class="primary"
-  onclick="
-    document
-      .getElementById('photoInput')
-      .click()
-  "
->
-写真を選択する
-</button>
+  <!--
+    背景画像内の
+    「写真・動画を見る」
+    に重なる透明ボタン
+  -->
 
-
-<button
-  class="video-button"
-  onclick="
-    document
-      .getElementById('videoInput')
-      .click()
-  "
->
-動画を選択する
-</button>
-
-
-<button
-  class="secondary"
-  onclick="openGallery()"
->
-みんなの写真・動画を見る
-</button>
-
-
-<div class="note">
-写真：一度に最大30枚<br>
-動画：一度に最大3本・1本500MBまで
-</div>
+  <button
+    type="button"
+    class="top-hit-area gallery-area"
+    aria-label="みんながアップロードした写真・動画を見る"
+    onclick="
+      openGallery()
+    "
+  >
+  </button>
 
 </section>
 
