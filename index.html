@@ -5119,18 +5119,13 @@ function updateGallerySelectionUI() {
 
 async function downloadSelectedMedia() {
 
-
   if (
-    selectedDownloadItems.size
-    ===
-    0
+    selectedDownloadItems.size === 0
   ) {
 
-
     alert(
-      'ダウンロードする写真・動画を選択してください。'
+      '保存する写真を選択してください。'
     );
-
 
     return;
 
@@ -5138,18 +5133,39 @@ async function downloadSelectedMedia() {
 
 
   const items =
-
     currentGalleryMedia
       .filter(
-
         item =>
-
           selectedDownloadItems
             .has(
               item.uniqueId
             )
-
       );
+
+
+  /*
+   * 今回はまず写真だけ対応
+   */
+  const photos =
+    items.filter(
+      item =>
+        item.type === 'image'
+        &&
+        item.source === 'drive'
+    );
+
+
+  if (
+    photos.length === 0
+  ) {
+
+    alert(
+      '写真を選択してください。'
+    );
+
+    return;
+
+  }
 
 
   const progress =
@@ -5160,156 +5176,342 @@ async function downloadSelectedMedia() {
 
 
   progress.textContent =
-
-    items.length
-
-    +
-
-    '件のダウンロードを開始します...';
+    '写真を準備しています...';
 
 
-  /*
-   * スマホブラウザでは
-   * 複数同時ダウンロードがブロックされやすいため
-   * 1件ずつ順番に実行
-   */
+  try {
 
-  for (
-
-    let i =
-      0;
-
-    i <
-    items.length;
-
-    i++
-
-  ) {
+    const files =
+      [];
 
 
-    const item =
-      items[i];
+    /*
+     * 選択した写真を
+     * Apps Scriptから1枚ずつ取得
+     */
+    for (
+      let i = 0;
+      i < photos.length;
+      i++
+    ) {
+
+      const photo =
+        photos[i];
 
 
-    progress.textContent =
+      progress.textContent =
 
-      items.length
-
-      +
-
-      '件中 '
-
-      +
-
-      (
-
-        i
+        photos.length
 
         +
 
-        1
+        '枚中 '
 
-      )
+        +
 
-      +
+        (i + 1)
 
-      '件をダウンロードしています...';
+        +
+
+        '枚を準備しています...';
 
 
-    triggerDownload(
-      item
+      const url =
+
+        APPS_SCRIPT_URL
+
+        +
+
+        '?action=download'
+
+        +
+
+        '&fileId='
+
+        +
+
+        encodeURIComponent(
+          photo.id
+        )
+
+        +
+
+        '&t='
+
+        +
+
+        Date.now();
+
+
+      const response =
+        await fetch(
+          url
+        );
+
+
+      if (
+        !response.ok
+      ) {
+
+        throw new Error(
+          '写真の取得に失敗しました。'
+        );
+
+      }
+
+
+      /*
+       * Apps Scriptから
+       * Base64文字列を取得
+       */
+      const base64 =
+        await response.text();
+
+
+      /*
+       * Base64
+       * ↓
+       * Blob
+       */
+      const binary =
+        atob(
+          base64
+        );
+
+
+      const bytes =
+        new Uint8Array(
+          binary.length
+        );
+
+
+      for (
+        let j = 0;
+        j < binary.length;
+        j++
+      ) {
+
+        bytes[j] =
+          binary.charCodeAt(
+            j
+          );
+
+      }
+
+
+      const extension =
+        getFileExtension(
+          photo.name
+        );
+
+
+      const mimeType =
+        getImageMimeType(
+          extension
+        );
+
+
+      const blob =
+        new Blob(
+          [bytes],
+          {
+            type:
+              mimeType
+          }
+        );
+
+
+      const file =
+        new File(
+          [blob],
+          photo.name || `wedding-photo-${i + 1}.jpg`,
+          {
+            type:
+              mimeType
+          }
+        );
+
+
+      files.push(
+        file
+      );
+
+    }
+
+
+    progress.textContent =
+      '保存画面を開いています...';
+
+
+    /*
+     * iPhone / Androidなど
+     * Web Share API対応端末
+     */
+    if (
+
+      navigator.share
+
+      &&
+
+      navigator.canShare
+
+      &&
+
+      navigator.canShare({
+        files:
+          files
+      })
+
+    ) {
+
+
+      await navigator.share({
+
+        files:
+          files
+
+      });
+
+
+      progress.textContent =
+        '保存画面を開きました。';
+
+
+    } else {
+
+
+      /*
+       * Web Share API非対応
+       */
+      alert(
+        'このブラウザでは複数写真の保存に対応していません。'
+      );
+
+
+      progress.textContent =
+        '';
+
+
+    }
+
+
+  } catch (
+    error
+  ) {
+
+
+    console.error(
+      error
     );
 
 
     /*
-     * 次のダウンロードまで待機
+     * iPhoneで共有画面を
+     * ユーザーが閉じただけの場合
      */
+    if (
+      error.name ===
+      'AbortError'
+    ) {
 
-    await sleep(
-      900
+      progress.textContent =
+        '';
+
+      return;
+
+    }
+
+
+    progress.textContent =
+      '写真の準備に失敗しました。';
+
+
+    alert(
+      '写真の保存処理に失敗しました。'
     );
 
+  }
+
+}
+
+
+/* =========================================================
+   ファイル拡張子取得
+========================================================= */
+
+
+function getFileExtension(
+  fileName
+) {
+
+  if (
+    !fileName
+    ||
+    !fileName.includes('.')
+  ) {
+
+    return 'jpg';
 
   }
 
 
-  progress.textContent =
-
-    'ダウンロード処理を開始しました。';
-
-
-  /*
-   * ブラウザによっては
-   * 複数ダウンロードの許可確認が表示される
-   */
+  return fileName
+    .split('.')
+    .pop()
+    .toLowerCase();
 
 }
 
 
+/* =========================================================
+   画像MIMEタイプ取得
+========================================================= */
 
-function triggerDownload(
-  item
+
+function getImageMimeType(
+  extension
 ) {
 
+  switch (
+    extension
+  ) {
 
-  const anchor =
-    document
-      .createElement(
-        'a'
-      );
+    case 'png':
 
-
-  anchor.href =
-    item.downloadUrl;
+      return 'image/png';
 
 
-  /*
-   * download属性は
-   * クロスオリジンでは
-   * 無視される場合がある
-   */
+    case 'webp':
 
-  anchor.download =
-    item.name
-
-    ||
-
-    'wedding-media';
+      return 'image/webp';
 
 
-  anchor.target =
-    '_blank';
+    case 'gif':
+
+      return 'image/gif';
 
 
-  anchor.rel =
-    'noopener';
+    case 'heic':
+
+      return 'image/heic';
 
 
-  document.body
-    .appendChild(
-      anchor
-    );
+    case 'heif':
+
+      return 'image/heif';
 
 
-  anchor.click();
+    case 'jpeg':
 
+    case 'jpg':
 
-  setTimeout(
+    default:
 
-    () => {
+      return 'image/jpeg';
 
-
-      anchor.remove();
-
-
-    },
-
-    1000
-
-  );
+  }
 
 }
-
 
 
 /* =========================================================
