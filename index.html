@@ -1892,206 +1892,57 @@ body:has(#selectScreen.active) {
 
 <section
   id="selectScreen"
-  class="screen active wedding-home"
+  class="screen active top-visual"
 >
 
-
-<input
-  type="file"
-  id="photoInput"
-  accept="image/*"
-  multiple
->
-
-
-<input
-  type="file"
-  id="videoInput"
-  accept="video/*"
-  multiple
->
-
-
-<div class="wedding-shell">
-
-
-<div class="wedding-wave">
-</div>
-
-
-<div class="wedding-star star-1">
-✦
-</div>
-
-
-<div class="wedding-star star-2">
-✧
-</div>
-
-
-<div class="wedding-star star-3">
-✦
-</div>
-
-
-<div class="wedding-star star-4">
-✧
-</div>
-
-
-<div class="wedding-content">
-
-
-<div class="wedding-names">
-YUKI &amp; YUKIKO
-</div>
-
-
-<div class="wedding-party-title">
-WEDDING PARTY
-</div>
-
-
-<div class="wedding-heart">
-♥
-</div>
-
-
-<h1 class="wedding-hero-title">
-SHARE<br>
-YOUR PHOTOS
-</h1>
-
-
-<div class="wedding-divider">
-⌁
-</div>
-
-
-<p class="wedding-lead">
-今日撮影した写真・動画を<br>
-ふたりに送ってください
-</p>
-
-
-
-<!-- 写真 -->
-
-<button
-  type="button"
-  class="wedding-action-card"
-  onclick="
-    document
-      .getElementById('photoInput')
-      .click()
-  "
->
-
-
-<div class="wedding-action-icon">
-▧
-</div>
-
-
-<div class="wedding-action-title">
-写真を選択する
-</div>
-
-
-<div class="wedding-action-note">
-♡ 一度に最大30枚までアップロードできます
-</div>
-
-
-</button>
-
-
-
-<!-- 動画 -->
-
-<button
-  type="button"
-  class="wedding-action-card"
-  onclick="
-    document
-      .getElementById('videoInput')
-      .click()
-  "
->
-
-
-<div class="wedding-action-icon">
-▷
-</div>
-
-
-<div class="wedding-action-title">
-動画を選択する
-</div>
-
-
-<div class="wedding-action-note">
-♡ 一度に最大3本までアップロードできます
-</div>
-
-
-</button>
-
-
-
-<!-- ギャラリー -->
-
-<button
-  type="button"
-  class="
-    wedding-action-card
-    wedding-gallery-card
-  "
-  onclick="
-    openGallery()
-  "
->
-
-
-<div class="wedding-action-icon">
-♙
-</div>
-
-
-<div class="wedding-action-title">
-みんながアップロードしてくれた<br>
-写真・動画を見る
-</div>
-
-
-</button>
-
-
-
-<div class="wedding-message-box">
-
-新郎がこの日のために必死でアプリ開発しました<br>
-
-今日限定のオリジナル写真共有サービスです 📷<br>
-
-万が一 エラーや不具合が発生した場合は<br>
-
-ご愛嬌ということで…!! あとでLINEください!!!
-
-</div>
-
-
-
-<div class="wedding-developed">
-Developed by Yuki Nakatani
-</div>
-
-
-</div>
-
-
-</div>
-
+  <input
+    type="file"
+    id="photoInput"
+    accept="image/*"
+    multiple
+  >
+
+  <input
+    type="file"
+    id="videoInput"
+    accept="video/*"
+    multiple
+  >
+
+  <img
+    src="./top-background.png"
+    class="top-background"
+    alt="YUKI & YUKIKO WEDDING PARTY"
+  >
+
+  <button
+    type="button"
+    class="top-hit-area photo-area"
+    aria-label="写真を選択する"
+    onclick="
+      document
+        .getElementById('photoInput')
+        .click()
+    "
+  ></button>
+
+  <button
+    type="button"
+    class="top-hit-area video-area"
+    aria-label="動画を選択する"
+    onclick="
+      document
+        .getElementById('videoInput')
+        .click()
+    "
+  ></button>
+
+  <button
+    type="button"
+    class="top-hit-area gallery-area"
+    aria-label="みんながアップロードした写真・動画を見る"
+    onclick="openGallery()"
+  ></button>
 
 </section>
 
