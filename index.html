@@ -1,262 +1,646 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+
   <meta charset="UTF-8">
 
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta
+    name="viewport"
+    content="
+      width=device-width,
+      initial-scale=1.0,
+      maximum-scale=1.0
+    "
+  >
 
-  <title>Wedding Photo Uploader</title>
+  <title>
+    Wedding Photo Uploader
+  </title>
+
 
   <style>
+
     * {
       box-sizing: border-box;
     }
 
+
     body {
+
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
-                   "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-      background: #f8f6f1;
-      color: #111;
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Helvetica Neue",
+        "Hiragino Kaku Gothic ProN",
+        "Yu Gothic",
+        sans-serif;
+
+      background:
+        #f8f6f1;
+
+      color:
+        #111;
+
     }
+
 
     .container {
-      max-width: 500px;
-      min-height: 100vh;
-      margin: 0 auto;
-      padding: 40px 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+
+      max-width:
+        500px;
+
+      min-height:
+        100vh;
+
+      margin:
+        0 auto;
+
+      padding:
+        40px 24px;
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      justify-content:
+        center;
+
     }
+
 
     .screen {
-      display: none;
-      text-align: center;
+
+      display:
+        none;
+
+      text-align:
+        center;
+
     }
+
 
     .screen.active {
-      display: block;
+
+      display:
+        block;
+
     }
+
 
     h1 {
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 30px;
-      font-weight: normal;
-      letter-spacing: 1px;
-      line-height: 1.2;
-      margin: 0 0 20px;
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size:
+        30px;
+
+      font-weight:
+        normal;
+
+      letter-spacing:
+        1px;
+
+      line-height:
+        1.2;
+
+      margin:
+        0 0 20px;
+
     }
+
 
     .line {
-      width: 32px;
-      height: 1px;
-      background: #111;
-      margin: 20px auto 32px;
+
+      width:
+        32px;
+
+      height:
+        1px;
+
+      background:
+        #111;
+
+      margin:
+        20px auto 32px;
+
     }
+
 
     p {
-      font-size: 15px;
-      line-height: 1.8;
-      margin-bottom: 30px;
+
+      font-size:
+        15px;
+
+      line-height:
+        1.8;
+
+      margin-bottom:
+        30px;
+
     }
+
 
     button {
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-      padding: 17px 20px;
-      font-size: 16px;
-      cursor: pointer;
+
+      width:
+        100%;
+
+      border:
+        none;
+
+      border-radius:
+        8px;
+
+      padding:
+        17px 20px;
+
+      font-size:
+        16px;
+
+      cursor:
+        pointer;
+
     }
+
 
     .primary {
-      background: #111;
-      color: #fff;
+
+      background:
+        #111;
+
+      color:
+        #fff;
+
     }
+
 
     .secondary {
-      margin-top: 12px;
-      background: transparent;
-      color: #111;
-      border: 1px solid #111;
+
+      margin-top:
+        12px;
+
+      background:
+        transparent;
+
+      color:
+        #111;
+
+      border:
+        1px solid #111;
+
     }
+
 
     .note {
-      font-size: 12px;
-      margin-top: 18px;
-      color: #666;
+
+      font-size:
+        12px;
+
+      margin-top:
+        18px;
+
+      color:
+        #666;
+
     }
+
 
     #fileInput {
-      display: none;
+
+      display:
+        none;
+
     }
+
 
     /* 選択写真 */
+
     .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin: 24px 0;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          1fr
+        );
+
+      gap:
+        8px;
+
+      margin:
+        24px 0;
+
     }
+
 
     .photo-item {
-      position: relative;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      border-radius: 6px;
-      background: #ddd;
+
+      position:
+        relative;
+
+      aspect-ratio:
+        1 / 1;
+
+      overflow:
+        hidden;
+
+      border-radius:
+        6px;
+
+      background:
+        #ddd;
+
     }
+
 
     .photo-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+
+      width:
+        100%;
+
+      height:
+        100%;
+
+      object-fit:
+        cover;
+
     }
+
 
     .delete-btn {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      width: 26px;
-      height: 26px;
-      padding: 0;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      font-size: 16px;
+
+      position:
+        absolute;
+
+      top:
+        4px;
+
+      right:
+        4px;
+
+      width:
+        26px;
+
+      height:
+        26px;
+
+      padding:
+        0;
+
+      border-radius:
+        50%;
+
+      background:
+        rgba(
+          0,
+          0,
+          0,
+          0.8
+        );
+
+      color:
+        white;
+
+      font-size:
+        16px;
+
     }
+
 
     .count {
-      margin: 12px 0;
-      font-size: 14px;
+
+      margin:
+        12px 0;
+
+      font-size:
+        14px;
+
     }
+
 
     /* アップロード */
+
     .upload-icon {
-      font-size: 60px;
-      margin: 30px 0;
+
+      font-size:
+        60px;
+
+      margin:
+        30px 0;
+
     }
+
 
     .progress-area {
-      margin: 30px 0;
+
+      margin:
+        30px 0;
+
     }
+
 
     .progress-bar {
-      width: 100%;
-      height: 10px;
-      background: #ddd;
-      border-radius: 10px;
-      overflow: hidden;
+
+      width:
+        100%;
+
+      height:
+        10px;
+
+      background:
+        #ddd;
+
+      border-radius:
+        10px;
+
+      overflow:
+        hidden;
+
     }
+
 
     .progress {
-      width: 0%;
-      height: 100%;
-      background: #111;
-      transition: width 0.3s;
+
+      width:
+        0%;
+
+      height:
+        100%;
+
+      background:
+        #111;
+
+      transition:
+        width 0.3s;
+
     }
+
 
     .progress-text {
-      margin-top: 15px;
-      font-size: 18px;
+
+      margin-top:
+        15px;
+
+      font-size:
+        18px;
+
     }
+
 
     .heart {
-      font-size: 60px;
-      margin: 30px 0;
+
+      font-size:
+        60px;
+
+      margin:
+        30px 0;
+
     }
+
 
     .error {
-      color: #b00020;
-      font-size: 14px;
-      margin-top: 20px;
-      line-height: 1.6;
+
+      color:
+        #b00020;
+
+      font-size:
+        14px;
+
+      margin-top:
+        20px;
+
+      line-height:
+        1.6;
+
     }
+
 
     /* ギャラリー */
+
     .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 4px;
-      margin: 24px 0;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          1fr
+        );
+
+      gap:
+        4px;
+
+      margin:
+        24px 0;
+
     }
+
 
     .gallery-item {
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      background: #ddd;
-      cursor: pointer;
+
+      aspect-ratio:
+        1 / 1;
+
+      overflow:
+        hidden;
+
+      background:
+        #ddd;
+
+      cursor:
+        pointer;
+
     }
 
+
     .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+
+      width:
+        100%;
+
+      height:
+        100%;
+
+      object-fit:
+        cover;
+
+      display:
+        block;
+
     }
+
 
     .gallery-loading,
     .gallery-empty {
-      padding: 50px 0;
-      font-size: 14px;
-      color: #666;
+
+      padding:
+        50px 0;
+
+      font-size:
+        14px;
+
+      color:
+        #666;
+
     }
+
 
     /* 拡大表示 */
+
     .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.92);
-      align-items: center;
-      justify-content: center;
+
+      display:
+        none;
+
+      position:
+        fixed;
+
+      z-index:
+        1000;
+
+      inset:
+        0;
+
+      width:
+        100%;
+
+      height:
+        100%;
+
+      background:
+        rgba(
+          0,
+          0,
+          0,
+          0.92
+        );
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
     }
+
 
     .modal.active {
-      display: flex;
+
+      display:
+        flex;
+
     }
+
 
     .modal img {
-      max-width: 95%;
-      max-height: 90%;
-      object-fit: contain;
+
+      max-width:
+        95%;
+
+      max-height:
+        90%;
+
+      object-fit:
+        contain;
+
     }
 
+
     .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 44px;
-      height: 44px;
-      padding: 0;
-      border-radius: 50%;
-      background: white;
-      color: black;
-      font-size: 25px;
+
+      position:
+        absolute;
+
+      top:
+        20px;
+
+      right:
+        20px;
+
+      width:
+        44px;
+
+      height:
+        44px;
+
+      padding:
+        0;
+
+      border-radius:
+        50%;
+
+      background:
+        white;
+
+      color:
+        black;
+
+      font-size:
+        25px;
+
+      z-index:
+        1001;
+
     }
+
+
+    .modal-loading {
+
+      position:
+        absolute;
+
+      color:
+        white;
+
+      font-size:
+        14px;
+
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
+
   <!-- トップ -->
-  <section id="selectScreen" class="screen active">
 
-    <h1>SHARE<br>YOUR PHOTOS</h1>
+  <section
+    id="selectScreen"
+    class="screen active"
+  >
 
-    <div class="line"></div>
+    <h1>
+      SHARE<br>
+      YOUR PHOTOS
+    </h1>
+
+
+    <div
+      class="line">
+    </div>
+
 
     <p>
       今日撮影した写真を<br>
       ふたりに送ってください
     </p>
+
 
     <input
       type="file"
@@ -265,19 +649,34 @@
       multiple
     >
 
+
     <button
       class="primary"
-      onclick="document.getElementById('fileInput').click()">
+      onclick="
+        document
+          .getElementById(
+            'fileInput'
+          )
+          .click()
+      "
+    >
       写真を選択する
     </button>
 
+
     <button
       class="secondary"
-      onclick="openGallery()">
+      onclick="
+        openGallery()
+      "
+    >
       みんなの写真を見る
     </button>
 
-    <div class="note">
+
+    <div
+      class="note"
+    >
       一度に最大10枚まで選択できます
     </div>
 
@@ -285,28 +684,65 @@
 
 
   <!-- 写真確認 -->
-  <section id="confirmScreen" class="screen">
 
-    <h1>SHARE<br>YOUR PHOTOS</h1>
+  <section
+    id="confirmScreen"
+    class="screen"
+  >
 
-    <div class="line"></div>
+    <h1>
+      SHARE<br>
+      YOUR PHOTOS
+    </h1>
 
-    <p>選択した写真を確認してください</p>
 
-    <div id="photoGrid" class="photo-grid"></div>
+    <div
+      class="line">
+    </div>
 
-    <div id="photoCount" class="count"></div>
+
+    <p>
+      選択した写真を確認してください
+    </p>
+
+
+    <div
+      id="photoGrid"
+      class="photo-grid"
+    >
+    </div>
+
+
+    <div
+      id="photoCount"
+      class="count"
+    >
+    </div>
+
 
     <button
       class="secondary"
-      onclick="document.getElementById('fileInput').click()">
+      onclick="
+        document
+          .getElementById(
+            'fileInput'
+          )
+          .click()
+      "
+    >
       写真を追加する
     </button>
 
+
     <button
       class="primary"
-      style="margin-top:12px;"
-      onclick="startUpload()">
+      style="
+        margin-top:12px;
+      "
+      onclick="
+        startUpload()
+      "
+    >
       アップロードする
     </button>
 
@@ -314,67 +750,137 @@
 
 
   <!-- アップロード中 -->
-  <section id="uploadScreen" class="screen">
 
-    <h1>SHARE<br>YOUR PHOTOS</h1>
+  <section
+    id="uploadScreen"
+    class="screen"
+  >
 
-    <div class="line"></div>
+    <h1>
+      SHARE<br>
+      YOUR PHOTOS
+    </h1>
 
-    <p>アップロード中です</p>
 
-    <div class="upload-icon">↑</div>
+    <div
+      class="line">
+    </div>
 
-    <div class="progress-area">
 
-      <div class="progress-bar">
-        <div id="progress" class="progress"></div>
+    <p>
+      アップロード中です
+    </p>
+
+
+    <div
+      class="upload-icon"
+    >
+      ↑
+    </div>
+
+
+    <div
+      class="progress-area"
+    >
+
+      <div
+        class="progress-bar"
+      >
+
+        <div
+          id="progress"
+          class="progress"
+        >
+        </div>
+
       </div>
 
-      <div id="progressText" class="progress-text">
+
+      <div
+        id="progressText"
+        class="progress-text"
+      >
         0%
       </div>
 
-      <div id="progressCount" class="count">
+
+      <div
+        id="progressCount"
+        class="count"
+      >
         0枚中 0枚完了
       </div>
 
     </div>
+
 
     <p>
       この画面を閉じずに<br>
       そのままお待ちください
     </p>
 
-    <div id="errorMessage" class="error"></div>
+
+    <div
+      id="errorMessage"
+      class="error"
+    >
+    </div>
 
   </section>
 
 
   <!-- 完了 -->
-  <section id="completeScreen" class="screen">
 
-    <h1>UPLOAD<br>COMPLETE!</h1>
+  <section
+    id="completeScreen"
+    class="screen"
+  >
 
-    <div class="line"></div>
+    <h1>
+      UPLOAD<br>
+      COMPLETE!
+    </h1>
 
-    <p>写真を送信しました</p>
 
-    <div class="heart">♡</div>
+    <div
+      class="line">
+    </div>
+
+
+    <p>
+      写真を送信しました
+    </p>
+
+
+    <div
+      class="heart"
+    >
+      ♡
+    </div>
+
 
     <p>
       素敵な写真を<br>
       ありがとうございます！
     </p>
 
+
     <button
       class="primary"
-      onclick="resetApp()">
+      onclick="
+        resetApp()
+      "
+    >
       さらに写真を送る
     </button>
 
+
     <button
       class="secondary"
-      onclick="openGallery()">
+      onclick="
+        openGallery()
+      "
+    >
       みんなの写真を見る
     </button>
 
@@ -382,226 +888,427 @@
 
 
   <!-- ギャラリー -->
-  <section id="galleryScreen" class="screen">
 
-    <h1>PHOTO<br>GALLERY</h1>
+  <section
+    id="galleryScreen"
+    class="screen"
+  >
 
-    <div class="line"></div>
+    <h1>
+      PHOTO<br>
+      GALLERY
+    </h1>
 
-    <p>みんなが撮影した写真</p>
+
+    <div
+      class="line">
+    </div>
+
+
+    <p>
+      みんなが撮影した写真
+    </p>
+
 
     <div
       id="galleryLoading"
-      class="gallery-loading">
+      class="gallery-loading"
+    >
       写真を読み込んでいます...
     </div>
+
 
     <div
       id="galleryEmpty"
       class="gallery-empty"
-      style="display:none;">
+      style="
+        display:none;
+      "
+    >
       まだ写真がありません
     </div>
 
+
     <div
       id="galleryGrid"
-      class="gallery-grid">
+      class="gallery-grid"
+    >
     </div>
+
 
     <button
       class="secondary"
-      onclick="showScreen('selectScreen')">
+      onclick="
+        showScreen(
+          'selectScreen'
+        )
+      "
+    >
       トップに戻る
     </button>
 
   </section>
 
+
 </div>
 
 
 <!-- 拡大表示 -->
+
 <div
   id="imageModal"
   class="modal"
-  onclick="closeModal(event)">
+  onclick="
+    closeModal(
+      event
+    )
+  "
+>
+
+
+  <div
+    id="modalLoading"
+    class="modal-loading"
+  >
+    写真を読み込んでいます...
+  </div>
+
 
   <button
     class="modal-close"
-    onclick="closeImageModal()">
+    onclick="
+      closeImageModal()
+    "
+  >
     ×
   </button>
 
-  <img id="modalImage" src="" alt="">
+
+  <img
+    id="modalImage"
+    src=""
+    alt=""
+    style="
+      display:none;
+    "
+  >
+
 
 </div>
 
 
 <script>
 
+
   /*
-   * Google Apps Script WebアプリURL
+   * Apps Script API
    */
+
   const API_URL =
     'https://script.google.com/macros/s/AKfycbzIpzbY8ZUbA0z2ct2ynJBCaWHS5CUe6Fk7FqEvnerV028Pprw6xPr1uOVQfnRYXjmR/exec';
 
 
-  const MAX_FILES = 10;
+  const MAX_FILES =
+    10;
 
-  let selectedFiles = [];
+
+  let selectedFiles =
+    [];
 
 
   document
-    .getElementById('fileInput')
-    .addEventListener('change', handleFileSelect);
+    .getElementById(
+      'fileInput'
+    )
+    .addEventListener(
+      'change',
+      handleFileSelect
+    );
 
 
-  function handleFileSelect(event) {
+  function handleFileSelect(
+    event
+  ) {
 
     const newFiles =
-      Array.from(event.target.files);
+      Array.from(
+        event.target.files
+      );
 
-    newFiles.forEach(file => {
 
-      if (!file.type.startsWith('image/')) {
-        return;
+    newFiles.forEach(
+      file => {
+
+        if (
+          !file.type
+            .startsWith(
+              'image/'
+            )
+        ) {
+          return;
+        }
+
+
+        if (
+          selectedFiles.length
+          <
+          MAX_FILES
+        ) {
+
+          selectedFiles.push(
+            file
+          );
+
+        }
+
       }
+    );
 
-      if (selectedFiles.length < MAX_FILES) {
-        selectedFiles.push(file);
-      }
 
-    });
+    event.target.value =
+      '';
 
-    event.target.value = '';
 
     renderPreview();
+
   }
 
 
   function renderPreview() {
 
-    if (selectedFiles.length === 0) {
+    if (
+      selectedFiles.length
+      ===
+      0
+    ) {
 
-      showScreen('selectScreen');
+      showScreen(
+        'selectScreen'
+      );
 
       return;
+
     }
 
+
     const grid =
-      document.getElementById('photoGrid');
-
-    grid.innerHTML = '';
-
-    selectedFiles.forEach((file, index) => {
-
-      const item =
-        document.createElement('div');
-
-      item.className = 'photo-item';
+      document
+        .getElementById(
+          'photoGrid'
+        );
 
 
-      const img =
-        document.createElement('img');
-
-      img.src =
-        URL.createObjectURL(file);
+    grid.innerHTML =
+      '';
 
 
-      const deleteButton =
-        document.createElement('button');
-
-      deleteButton.className =
-        'delete-btn';
-
-      deleteButton.innerHTML = '×';
-
-      deleteButton.onclick = () => {
-        removeFile(index);
-      };
+    selectedFiles.forEach(
+      (
+        file,
+        index
+      ) => {
 
 
-      item.appendChild(img);
+        const item =
+          document
+            .createElement(
+              'div'
+            );
 
-      item.appendChild(deleteButton);
 
-      grid.appendChild(item);
-    });
+        item.className =
+          'photo-item';
+
+
+        const img =
+          document
+            .createElement(
+              'img'
+            );
+
+
+        img.src =
+          URL
+            .createObjectURL(
+              file
+            );
+
+
+        const deleteButton =
+          document
+            .createElement(
+              'button'
+            );
+
+
+        deleteButton.className =
+          'delete-btn';
+
+
+        deleteButton.textContent =
+          '×';
+
+
+        deleteButton.onclick =
+          () => {
+
+            removeFile(
+              index
+            );
+
+          };
+
+
+        item.appendChild(
+          img
+        );
+
+
+        item.appendChild(
+          deleteButton
+        );
+
+
+        grid.appendChild(
+          item
+        );
+
+      }
+    );
 
 
     document
-      .getElementById('photoCount')
+      .getElementById(
+        'photoCount'
+      )
       .textContent =
-      selectedFiles.length + '枚選択中';
+
+      selectedFiles.length
+      +
+      '枚選択中';
 
 
-    showScreen('confirmScreen');
+    showScreen(
+      'confirmScreen'
+    );
+
   }
 
 
-  function removeFile(index) {
+  function removeFile(
+    index
+  ) {
 
-    selectedFiles.splice(index, 1);
+    selectedFiles.splice(
+      index,
+      1
+    );
+
 
     renderPreview();
+
   }
 
 
-  function showScreen(screenId) {
+  function showScreen(
+    screenId
+  ) {
 
     document
-      .querySelectorAll('.screen')
-      .forEach(screen => {
-        screen.classList.remove('active');
-      });
+      .querySelectorAll(
+        '.screen'
+      )
+      .forEach(
+        screen => {
+
+          screen
+            .classList
+            .remove(
+              'active'
+            );
+
+        }
+      );
 
 
     document
-      .getElementById(screenId)
+      .getElementById(
+        screenId
+      )
       .classList
-      .add('active');
+      .add(
+        'active'
+      );
 
 
-    window.scrollTo(0, 0);
+    window.scrollTo(
+      0,
+      0
+    );
+
   }
 
 
   /*
-   * アップロード開始
+   * アップロード
    */
+
   async function startUpload() {
 
-    if (selectedFiles.length === 0) {
+    if (
+      selectedFiles.length
+      ===
+      0
+    ) {
       return;
     }
 
 
-    showScreen('uploadScreen');
+    showScreen(
+      'uploadScreen'
+    );
 
 
     document
-      .getElementById('errorMessage')
-      .textContent = '';
+      .getElementById(
+        'errorMessage'
+      )
+      .textContent =
+      '';
 
 
     const total =
       selectedFiles.length;
 
 
-    let completed = 0;
+    let completed =
+      0;
 
 
-    for (const file of selectedFiles) {
+    for (
+      const file
+      of
+      selectedFiles
+    ) {
 
       try {
 
         const base64 =
-          await fileToBase64(file);
+          await
+          fileToBase64(
+            file
+          );
 
 
-        await uploadSingleFile(
+        await
+        uploadSingleFile(
+
           base64,
+
           file.name,
+
           file.type
+
         );
 
 
@@ -610,114 +1317,171 @@
 
         const percent =
           Math.round(
-            (completed / total) * 100
+
+            (
+              completed
+              /
+              total
+            )
+            *
+            100
+
           );
 
 
         document
-          .getElementById('progress')
-          .style.width =
-          percent + '%';
+          .getElementById(
+            'progress'
+          )
+          .style
+          .width =
+          percent
+          +
+          '%';
 
 
         document
-          .getElementById('progressText')
+          .getElementById(
+            'progressText'
+          )
           .textContent =
-          percent + '%';
+          percent
+          +
+          '%';
 
 
         document
-          .getElementById('progressCount')
+          .getElementById(
+            'progressCount'
+          )
           .textContent =
-          total +
-          '枚中 ' +
-          completed +
+
+          total
+          +
+          '枚中 '
+          +
+          completed
+          +
           '枚完了';
 
 
-      } catch (error) {
+      } catch (
+        error
+      ) {
 
-        console.error(error);
+        console.error(
+          error
+        );
 
 
         document
-          .getElementById('errorMessage')
+          .getElementById(
+            'errorMessage'
+          )
           .textContent =
           'アップロード中にエラーが発生しました。もう一度お試しください。';
 
 
         return;
+
       }
+
     }
 
 
-    showScreen('completeScreen');
+    showScreen(
+      'completeScreen'
+    );
+
   }
 
 
-  function fileToBase64(file) {
+  function fileToBase64(
+    file
+  ) {
 
     return new Promise(
-      (resolve, reject) => {
+
+      (
+        resolve,
+        reject
+      ) => {
+
 
         const reader =
           new FileReader();
 
 
-        reader.onload = () => {
-
-          const result =
-            reader.result;
+        reader.onload =
+          () => {
 
 
-          const base64 =
-            result.split(',')[1];
+            const result =
+              reader.result;
 
 
-          resolve(base64);
-        };
+            const base64 =
+              result
+                .split(
+                  ','
+                )[1];
+
+
+            resolve(
+              base64
+            );
+
+          };
 
 
         reader.onerror =
           reject;
 
 
-        reader.readAsDataURL(file);
+        reader
+          .readAsDataURL(
+            file
+          );
+
       }
+
     );
+
   }
 
 
-  /*
-   * GitHub Pages
-   * ↓
-   * Google Apps Script
-   *
-   * CORSを避けるためsimple POSTとして送信
-   */
   async function uploadSingleFile(
+
     base64,
+
     fileName,
+
     mimeType
+
   ) {
+
 
     const body =
       new URLSearchParams();
+
 
     body.append(
       'action',
       'upload'
     );
 
+
     body.append(
       'fileData',
       base64
     );
 
+
     body.append(
       'fileName',
       fileName
     );
+
 
     body.append(
       'mimeType',
@@ -726,75 +1490,99 @@
 
 
     await fetch(
-      API_URL,
-      {
-        method: 'POST',
 
-        mode: 'no-cors',
+      API_URL,
+
+      {
+
+        method:
+          'POST',
+
+        mode:
+          'no-cors',
 
         headers: {
+
           'Content-Type':
             'application/x-www-form-urlencoded'
+
         },
 
-        body: body.toString()
+        body:
+          body.toString()
+
       }
+
     );
+
   }
 
 
   /*
-   * ギャラリー表示
-   *
-   * JSONP方式でApps Scriptから取得
+   * ギャラリー
    */
+
   function openGallery() {
 
-    showScreen('galleryScreen');
+    showScreen(
+      'galleryScreen'
+    );
 
 
     const grid =
-      document.getElementById(
-        'galleryGrid'
-      );
+      document
+        .getElementById(
+          'galleryGrid'
+        );
 
 
     const loading =
-      document.getElementById(
-        'galleryLoading'
-      );
+      document
+        .getElementById(
+          'galleryLoading'
+        );
 
 
     const empty =
-      document.getElementById(
-        'galleryEmpty'
-      );
+      document
+        .getElementById(
+          'galleryEmpty'
+        );
 
 
-    grid.innerHTML = '';
+    grid.innerHTML =
+      '';
+
 
     loading.style.display =
       'block';
+
 
     empty.style.display =
       'none';
 
 
     const oldScript =
-      document.getElementById(
-        'galleryJsonp'
-      );
+      document
+        .getElementById(
+          'galleryJsonp'
+        );
 
 
-    if (oldScript) {
+    if (
+      oldScript
+    ) {
+
       oldScript.remove();
+
     }
 
 
     const script =
-      document.createElement(
-        'script'
-      );
+      document
+        .createElement(
+          'script'
+        );
 
 
     script.id =
@@ -802,56 +1590,76 @@
 
 
     script.src =
-      API_URL +
-      '?action=gallery' +
-      '&callback=renderGallery' +
-      '&t=' +
+
+      API_URL
+
+      +
+
+      '?action=gallery'
+
+      +
+
+      '&callback=renderGallery'
+
+      +
+
+      '&t='
+
+      +
+
       Date.now();
 
 
-    script.onerror = () => {
-
-      loading.style.display =
-        'none';
+    script.onerror =
+      () => {
 
 
-      empty.style.display =
-        'block';
+        loading.style.display =
+          'none';
 
 
-      empty.textContent =
-        '写真の読み込みに失敗しました';
-
-    };
+        empty.style.display =
+          'block';
 
 
-    document.body.appendChild(
-      script
-    );
+        empty.textContent =
+          '写真の読み込みに失敗しました';
+
+      };
+
+
+    document.body
+      .appendChild(
+        script
+      );
+
   }
 
 
-  /*
-   * Apps Scriptから呼び出される
-   */
-  function renderGallery(images) {
+  function renderGallery(
+    images
+  ) {
+
 
     const grid =
-      document.getElementById(
-        'galleryGrid'
-      );
+      document
+        .getElementById(
+          'galleryGrid'
+        );
 
 
     const loading =
-      document.getElementById(
-        'galleryLoading'
-      );
+      document
+        .getElementById(
+          'galleryLoading'
+        );
 
 
     const empty =
-      document.getElementById(
-        'galleryEmpty'
-      );
+      document
+        .getElementById(
+          'galleryEmpty'
+        );
 
 
     loading.style.display =
@@ -859,128 +1667,359 @@
 
 
     if (
-      !images ||
-      images.length === 0
+      !images
+      ||
+      images.length
+      ===
+      0
     ) {
+
 
       empty.style.display =
         'block';
 
+
+      empty.textContent =
+        'まだ写真がありません';
+
+
       return;
+
     }
 
 
-    images.forEach(image => {
+    images.forEach(
+      image => {
 
-      const item =
-        document.createElement(
-          'div'
+
+        const item =
+          document
+            .createElement(
+              'div'
+            );
+
+
+        item.className =
+          'gallery-item';
+
+
+        const img =
+          document
+            .createElement(
+              'img'
+            );
+
+
+        img.src =
+          image.thumbnail;
+
+
+        img.loading =
+          'lazy';
+
+
+        img.onclick =
+          () => {
+
+
+            loadOriginalImage(
+              image.id
+            );
+
+          };
+
+
+        item.appendChild(
+          img
         );
 
 
-      item.className =
-        'gallery-item';
+        grid.appendChild(
+          item
+        );
+
+      }
+    );
+
+  }
 
 
-      const img =
-        document.createElement(
-          'img'
+  /*
+   * 原本1枚取得
+   */
+
+  function loadOriginalImage(
+    fileId
+  ) {
+
+
+    const modal =
+      document
+        .getElementById(
+          'imageModal'
         );
 
 
-      img.src =
-        image.dataUrl;
-
-
-      img.loading =
-        'lazy';
-
-
-      img.onclick = () => {
-
-        openImageModal(
-          image.dataUrl
+    const modalImage =
+      document
+        .getElementById(
+          'modalImage'
         );
+
+
+    const modalLoading =
+      document
+        .getElementById(
+          'modalLoading'
+        );
+
+
+    modalImage.src =
+      '';
+
+
+    modalImage.style.display =
+      'none';
+
+
+    modalLoading.style.display =
+      'block';
+
+
+    modal
+      .classList
+      .add(
+        'active'
+      );
+
+
+    const oldScript =
+      document
+        .getElementById(
+          'originalImageJsonp'
+        );
+
+
+    if (
+      oldScript
+    ) {
+
+      oldScript.remove();
+
+    }
+
+
+    const script =
+      document
+        .createElement(
+          'script'
+        );
+
+
+    script.id =
+      'originalImageJsonp';
+
+
+    script.src =
+
+      API_URL
+
+      +
+
+      '?action=image'
+
+      +
+
+      '&fileId='
+
+      +
+
+      encodeURIComponent(
+        fileId
+      )
+
+      +
+
+      '&callback=renderOriginalImage'
+
+      +
+
+      '&t='
+
+      +
+
+      Date.now();
+
+
+    script.onerror =
+      () => {
+
+
+        modalLoading.textContent =
+          '写真の読み込みに失敗しました';
 
       };
 
 
-      item.appendChild(img);
+    document.body
+      .appendChild(
+        script
+      );
 
-
-      grid.appendChild(item);
-    });
   }
 
 
-  function openImageModal(imageUrl) {
-
-    document
-      .getElementById('modalImage')
-      .src =
-      imageUrl;
+  function renderOriginalImage(
+    result
+  ) {
 
 
-    document
-      .getElementById('imageModal')
-      .classList
-      .add('active');
+    const modalImage =
+      document
+        .getElementById(
+          'modalImage'
+        );
+
+
+    const modalLoading =
+      document
+        .getElementById(
+          'modalLoading'
+        );
+
+
+    if (
+      !result
+      ||
+      !result.success
+    ) {
+
+
+      modalLoading.textContent =
+        '写真の読み込みに失敗しました';
+
+
+      return;
+
+    }
+
+
+    modalImage.src =
+      result.dataUrl;
+
+
+    modalImage.onload =
+      () => {
+
+
+        modalLoading.style.display =
+          'none';
+
+
+        modalImage.style.display =
+          'block';
+
+      };
+
   }
 
 
   function closeImageModal() {
 
+
     document
-      .getElementById('imageModal')
+      .getElementById(
+        'imageModal'
+      )
       .classList
-      .remove('active');
+      .remove(
+        'active'
+      );
+
+
+    document
+      .getElementById(
+        'modalImage'
+      )
+      .src =
+      '';
+
+
   }
 
 
-  function closeModal(event) {
+  function closeModal(
+    event
+  ) {
+
 
     if (
-      event.target.id ===
+      event.target.id
+      ===
       'imageModal'
     ) {
 
+
       closeImageModal();
+
     }
+
   }
 
 
+  /*
+   * リセット
+   */
+
   function resetApp() {
 
-    selectedFiles = [];
+
+    selectedFiles =
+      [];
 
 
     document
-      .getElementById('photoGrid')
-      .innerHTML = '';
+      .getElementById(
+        'photoGrid'
+      )
+      .innerHTML =
+      '';
 
 
     document
-      .getElementById('progress')
-      .style.width =
+      .getElementById(
+        'progress'
+      )
+      .style
+      .width =
       '0%';
 
 
     document
-      .getElementById('progressText')
+      .getElementById(
+        'progressText'
+      )
       .textContent =
       '0%';
 
 
     document
-      .getElementById('progressCount')
+      .getElementById(
+        'progressCount'
+      )
       .textContent =
       '0枚中 0枚完了';
 
 
-    showScreen('selectScreen');
+    showScreen(
+      'selectScreen'
+    );
+
   }
 
+
 </script>
+
 
 </body>
 </html>
