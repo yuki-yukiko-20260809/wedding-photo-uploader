@@ -653,7 +653,73 @@ button {
 
   z-index: 1002;
 }
+/* =========================================
+   トップページ
+   背景画像＋透明クリックエリア
+========================================= */
 
+#selectScreen.top-visual {
+  position: relative;
+  width: calc(100% + 48px);
+  margin: -40px -24px;
+  line-height: 0;
+  overflow: hidden;
+}
+
+.top-background {
+  display: block;
+  width: 100%;
+  height: auto;
+
+  user-select: none;
+  -webkit-user-select: none;
+
+  pointer-events: none;
+}
+
+.top-hit-area {
+  position: absolute;
+
+  left: 14.2%;
+  width: 73.6%;
+
+  margin: 0;
+  padding: 0;
+
+  border: none;
+  border-radius: 18px;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  z-index: 5;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 写真を選択する */
+.photo-area {
+  top: 42.9%;
+  height: 12.4%;
+}
+
+/* 動画を選択する */
+.video-area {
+  top: 56.6%;
+  height: 12.4%;
+}
+
+/* ギャラリーを見る */
+.gallery-area {
+  top: 70.3%;
+  height: 9.6%;
+}
+
+.top-hit-area:focus-visible {
+  outline: 3px solid rgba(160, 125, 78, 0.65);
+  outline-offset: 2px;
+}
 </style>
 
 </head>
