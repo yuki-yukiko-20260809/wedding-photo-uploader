@@ -721,6 +721,682 @@ button {
   outline: 3px solid rgba(160, 125, 78, 0.65);
   outline-offset: 2px;
 }
+
+/* =========================================
+   Wedding Top Page
+========================================= */
+
+#selectScreen.wedding-home {
+  width: 100%;
+  min-height: 100svh;
+  margin: 0;
+  padding: 12px;
+  background:
+    linear-gradient(
+      145deg,
+      #e6d8c6 0%,
+      #efe5d8 48%,
+      #e4d4c1 100%
+    );
+}
+
+.wedding-shell {
+  position: relative;
+
+  width: min(100%, 520px);
+
+  margin: 0 auto;
+
+  padding:
+    54px
+    24px
+    28px;
+
+  overflow: hidden;
+
+  border-radius:
+    54px
+    54px
+    28px
+    28px;
+
+  background:
+    #fbf8f3;
+
+  border:
+    1px solid
+    rgba(185, 155, 115, 0.52);
+
+  box-shadow:
+    0 12px 35px
+    rgba(99, 74, 43, 0.12);
+}
+
+
+/* 内側の点線枠 */
+
+.wedding-shell::before {
+  content: "";
+
+  position: absolute;
+
+  inset:
+    36px
+    22px
+    22px;
+
+  border:
+    1px dashed
+    rgba(184, 151, 109, 0.55);
+
+  border-radius:
+    34px;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+/* 上の波っぽい装飾 */
+
+.wedding-wave {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 48px;
+
+  background:
+    radial-gradient(
+      circle at 7% 100%,
+      transparent 27px,
+      #e6d8c6 28px
+    ),
+    radial-gradient(
+      circle at 21% 100%,
+      transparent 27px,
+      #e6d8c6 28px
+    ),
+    radial-gradient(
+      circle at 35% 100%,
+      transparent 27px,
+      #e6d8c6 28px
+    ),
+    radial-gradient(
+      circle at 49% 100%,
+      transparent 27px,
+      #e6d8c6 28px
+    ),
+    radial-gradient(
+      circle at 63% 100%,
+      transparent 27px,
+      #e6d8c6 28px
+    ),
+    radial-gradient(
+      circle at 77% 100%,
+      transparent 27px,
+      #e6d8c6 28px
+    ),
+    radial-gradient(
+      circle at 91% 100%,
+      transparent 27px,
+      #e6d8c6 28px
+    );
+
+  opacity: 0.95;
+
+  pointer-events: none;
+}
+
+
+/* コンテンツ共通 */
+
+.wedding-content {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* ヘッダー */
+
+.wedding-names {
+  margin-top: 16px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 16px;
+
+  letter-spacing: 5px;
+
+  text-align: center;
+
+  color: #4a4033;
+}
+
+.wedding-party-title {
+  margin-top: 10px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 15px;
+
+  letter-spacing: 4px;
+
+  text-align: center;
+
+  color: #4a4033;
+}
+
+.wedding-party-title::before,
+.wedding-party-title::after {
+  content: "•";
+
+  margin: 0 10px;
+
+  color: #b99a6b;
+}
+
+
+.wedding-heart {
+  margin-top: 16px;
+
+  text-align: center;
+
+  font-size: 34px;
+
+  color: #c4a06b;
+}
+
+
+/* メインタイトル */
+
+.wedding-hero-title {
+  margin:
+    22px
+    0
+    0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      38px,
+      11vw,
+      58px
+    );
+
+  font-weight: normal;
+
+  letter-spacing: 2px;
+
+  line-height: 1.1;
+
+  color: #3e352b;
+
+  text-align: center;
+}
+
+
+.wedding-divider {
+  width: 82px;
+
+  margin:
+    20px
+    auto;
+
+  text-align: center;
+
+  color: #c09b66;
+
+  font-size: 28px;
+}
+
+
+/* 説明文 */
+
+.wedding-lead {
+  margin:
+    20px
+    0
+    28px;
+
+  font-size:
+    18px;
+
+  line-height: 2;
+
+  letter-spacing: 2px;
+
+  text-align: center;
+
+  color: #302a24;
+}
+
+
+/* カード共通 */
+
+.wedding-action-card {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 118px;
+
+  margin-top: 18px;
+
+  padding:
+    20px
+    20px
+    20px
+    112px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: flex-start;
+
+  border:
+    1px solid
+    rgba(190, 159, 119, 0.5);
+
+  border-radius: 18px;
+
+  background:
+    rgba(255, 253, 249, 0.92);
+
+  box-shadow:
+    0 6px 18px
+    rgba(80, 57, 30, 0.1);
+
+  text-align: left;
+
+  color: #302820;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+
+.wedding-action-card:active {
+  transform:
+    scale(0.985);
+
+  box-shadow:
+    0 3px 10px
+    rgba(80, 57, 30, 0.12);
+}
+
+
+/* 左アイコンエリア */
+
+.wedding-action-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 92px;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #e9ded0,
+      #d8c4ac
+    );
+}
+
+
+/* 右矢印 */
+
+.wedding-action-card::after {
+  content: "›";
+
+  position: absolute;
+
+  top: 50%;
+  right: 18px;
+
+  transform:
+    translateY(-50%);
+
+  font-size: 48px;
+
+  font-weight: 200;
+
+  line-height: 1;
+
+  color: #c3a06e;
+}
+
+
+/* アイコン */
+
+.wedding-action-icon {
+  position: absolute;
+
+  left: 24px;
+
+  top: 50%;
+
+  transform:
+    translateY(-50%);
+
+  z-index: 2;
+
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 38px;
+
+  color: #fff;
+}
+
+
+.wedding-action-title {
+  position: relative;
+
+  z-index: 2;
+
+  padding-right: 35px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 27px;
+
+  letter-spacing: 2px;
+
+  line-height: 1.35;
+}
+
+
+.wedding-action-note {
+  position: relative;
+
+  z-index: 2;
+
+  margin-top: 10px;
+
+  padding:
+    6px
+    14px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(232, 224, 213, 0.75);
+
+  font-size: 12px;
+
+  letter-spacing: 0.5px;
+
+  line-height: 1.4;
+
+  color: #55483b;
+}
+
+
+/* ギャラリーカード */
+
+.wedding-gallery-card {
+  min-height: 96px;
+
+  padding-left: 96px;
+}
+
+
+.wedding-gallery-card::before {
+  width: 78px;
+
+  background:
+    transparent;
+}
+
+
+.wedding-gallery-card .wedding-action-icon {
+  left: 18px;
+
+  color: #4a4137;
+}
+
+
+.wedding-gallery-card
+.wedding-action-title {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    "Yu Gothic",
+    sans-serif;
+
+  font-size: 18px;
+
+  line-height: 1.7;
+
+  letter-spacing: 1px;
+}
+
+
+/* メッセージボックス */
+
+.wedding-message-box {
+  margin-top: 28px;
+
+  padding:
+    20px
+    16px;
+
+  border:
+    1px solid
+    rgba(190, 159, 119, 0.45);
+
+  border-radius: 15px;
+
+  background:
+    rgba(255,255,255,0.45);
+
+  font-size: 13px;
+
+  line-height: 2;
+
+  letter-spacing: 0.4px;
+
+  text-align: center;
+
+  color: #42382d;
+}
+
+
+/* フッター */
+
+.wedding-developed {
+  margin-top: 28px;
+
+  padding-bottom: 10px;
+
+  text-align: center;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 15px;
+
+  color: #8a7254;
+
+  letter-spacing: 0.8px;
+}
+
+
+.wedding-developed::before {
+  content: "❧";
+
+  margin-right: 10px;
+
+  color: #c3a06e;
+}
+
+
+.wedding-developed::after {
+  content: "❧";
+
+  margin-left: 10px;
+
+  display: inline-block;
+
+  transform:
+    scaleX(-1);
+
+  color: #c3a06e;
+}
+
+
+/* 星装飾 */
+
+.wedding-star {
+  position: absolute;
+
+  z-index: 1;
+
+  color: #c5a16d;
+
+  font-size: 20px;
+
+  opacity: 0.8;
+}
+
+.star-1 {
+  top: 145px;
+  left: 38px;
+}
+
+.star-2 {
+  top: 210px;
+  right: 42px;
+}
+
+.star-3 {
+  top: 420px;
+  left: 24px;
+}
+
+.star-4 {
+  bottom: 140px;
+  right: 28px;
+}
+
+
+/* スマホ */
+
+@media (
+  max-width: 420px
+) {
+
+  #selectScreen.wedding-home {
+    padding: 6px;
+  }
+
+  .wedding-shell {
+    padding:
+      48px
+      18px
+      22px;
+
+    border-radius:
+      40px
+      40px
+      24px
+      24px;
+  }
+
+  .wedding-shell::before {
+    inset:
+      28px
+      14px
+      14px;
+  }
+
+  .wedding-names {
+    font-size: 13px;
+    letter-spacing: 4px;
+  }
+
+  .wedding-party-title {
+    font-size: 12px;
+    letter-spacing: 3px;
+  }
+
+  .wedding-lead {
+    font-size: 16px;
+  }
+
+  .wedding-action-card {
+    min-height: 104px;
+
+    padding-left: 92px;
+  }
+
+  .wedding-action-card::before {
+    width: 76px;
+  }
+
+  .wedding-action-icon {
+    left: 18px;
+
+    font-size: 32px;
+  }
+
+  .wedding-action-title {
+    font-size: 22px;
+  }
+
+  .wedding-action-note {
+    font-size: 10px;
+  }
+
+  .wedding-gallery-card {
+    padding-left: 80px;
+  }
+
+  .wedding-gallery-card
+  .wedding-action-title {
+    font-size: 15px;
+  }
+
+}
+  
 </style>
 
 </head>
