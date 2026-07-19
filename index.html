@@ -5108,9 +5108,9 @@ function updateGallerySelectionUI() {
 }
 
 
-
 /* =========================================================
    選択した写真をまとめて保存
+   Cloudflare Worker経由
 ========================================================= */
 
 
@@ -5134,7 +5134,7 @@ async function downloadSelectedMedia() {
 
 
   /*
-   * 選択された写真
+   * 選択された写真のみ取得
    */
 
   const photos =
@@ -5197,8 +5197,8 @@ async function downloadSelectedMedia() {
 
 
     /*
-     * Apps Scriptから
-     * JSONPで写真を取得
+     * 選択した写真を
+     * Cloudflare Worker経由で取得
      */
 
     for (
@@ -5239,34 +5239,37 @@ async function downloadSelectedMedia() {
         '枚を準備しています...';
 
 
-      const result =
-        await loadPhotoForDownload(
+      const photoUrl =
+
+        WORKER_URL
+
+        +
+
+        '/photo'
+
+        +
+
+        '?fileId='
+
+        +
+
+        encodeURIComponent(
           photo.id
         );
 
 
+      const response =
+        await fetch(
+          photoUrl
+        );
+
+
       if (
-
-        !result
-
-        ||
-
-        !result.success
-
+        !response.ok
       ) {
 
 
         throw new Error(
-
-          result
-          &&
-          result.message
-
-          ?
-
-          result.message
-
-          :
 
           '写真の取得に失敗しました。'
 
@@ -5277,41 +5280,24 @@ async function downloadSelectedMedia() {
 
 
       /*
-       * Base64
-       * ↓
-       * Uint8Array
+       * 画像をBlobとして直接取得
        */
 
-      const binary =
-        atob(
-          result.base64
-        );
+      const blob =
+        await response.blob();
 
 
-      const bytes =
-        new Uint8Array(
-          binary.length
-        );
-
-
-      for (
-
-        let j =
-          0;
-
-        j <
-        binary.length;
-
-        j++
-
+      if (
+        !blob
+        ||
+        blob.size ===
+        0
       ) {
 
 
-        bytes[j] =
-          binary
-            .charCodeAt(
-              j
-            );
+        throw new Error(
+          '写真データが空です。'
+        );
 
 
       }
@@ -5323,7 +5309,11 @@ async function downloadSelectedMedia() {
 
       const mimeType =
 
-        result.mimeType
+        blob.type
+
+        ||
+
+        photo.mimeType
 
         ||
 
@@ -5331,34 +5321,11 @@ async function downloadSelectedMedia() {
 
 
       /*
-       * Blob
-       */
-
-      const blob =
-        new Blob(
-
-          [
-            bytes
-          ],
-
-          {
-            type:
-              mimeType
-          }
-
-        );
-
-
-      /*
-       * File
+       * ファイル名
        */
 
       const fileName =
         sanitizeShareFileName(
-
-          result.fileName
-
-          ||
 
           photo.name
 
@@ -5383,6 +5350,10 @@ async function downloadSelectedMedia() {
         );
 
 
+      /*
+       * File化
+       */
+
       const file =
         new File(
 
@@ -5393,8 +5364,10 @@ async function downloadSelectedMedia() {
           fileName,
 
           {
+
             type:
               mimeType
+
           }
 
         );
@@ -5427,6 +5400,7 @@ async function downloadSelectedMedia() {
 
 
     /*
+     * iPhone / Android
      * Web Share API
      */
 
@@ -5450,11 +5424,6 @@ async function downloadSelectedMedia() {
     ) {
 
 
-      /*
-       * 写真はWebページには表示せず
-       * OSの共有シートへまとめて渡す
-       */
-
       await navigator.share({
 
         files:
@@ -5476,7 +5445,7 @@ async function downloadSelectedMedia() {
 
 
     /*
-     * Web Share非対応
+     * 非対応ブラウザ
      */
 
     progress.textContent =
@@ -5503,8 +5472,7 @@ async function downloadSelectedMedia() {
 
 
     /*
-     * 共有画面をキャンセルしただけなら
-     * エラー表示しない
+     * 共有画面を閉じただけの場合
      */
 
     if (
@@ -5547,266 +5515,6 @@ async function downloadSelectedMedia() {
 
 }
 
-
-
-/* =========================================================
-   Apps Scriptから
-   ダウンロード用写真データ取得
-   JSONP方式
-========================================================= */
-
-
-function loadPhotoForDownload(
-  fileId
-) {
-
-
-  return new Promise(
-
-    (
-      resolve,
-      reject
-    ) => {
-
-
-      const callbackName =
-
-        'photoDownloadCallback_'
-
-        +
-
-        Date.now()
-
-        +
-
-        '_'
-
-        +
-
-        Math.random()
-          .toString(
-            36
-          )
-          .substring(
-            2,
-            8
-          );
-
-
-      let finished =
-        false;
-
-
-      /*
-       * 後片付け
-       */
-
-      function cleanup() {
-
-
-        if (
-          finished
-        ) {
-
-          return;
-
-        }
-
-
-        finished =
-          true;
-
-
-        clearTimeout(
-          timeout
-        );
-
-
-        const script =
-          document
-            .getElementById(
-              callbackName
-            );
-
-
-        if (
-          script
-        ) {
-
-
-          script.remove();
-
-
-        }
-
-
-        try {
-
-
-          delete window[
-            callbackName
-          ];
-
-
-        } catch (
-          error
-        ) {
-
-
-          window[
-            callbackName
-          ] =
-          undefined;
-
-
-        }
-
-
-      }
-
-
-      /*
-       * タイムアウト
-       */
-
-      const timeout =
-        setTimeout(
-
-          () => {
-
-
-            cleanup();
-
-
-            reject(
-
-              new Error(
-                '写真の取得がタイムアウトしました。'
-              )
-
-            );
-
-
-          },
-
-          60000
-
-        );
-
-
-      /*
-       * JSONP callback
-       */
-
-      window[
-        callbackName
-      ] =
-
-        result => {
-
-
-          /*
-           * cleanupより先に
-           * resolve用データを保持
-           */
-
-          const responseData =
-            result;
-
-
-          cleanup();
-
-
-          resolve(
-            responseData
-          );
-
-
-        };
-
-
-      /*
-       * scriptタグ作成
-       */
-
-      const script =
-        document
-          .createElement(
-            'script'
-          );
-
-
-      script.id =
-        callbackName;
-
-
-      script.src =
-
-        APPS_SCRIPT_URL
-
-        +
-
-        '?action=download'
-
-        +
-
-        '&fileId='
-
-        +
-
-        encodeURIComponent(
-          fileId
-        )
-
-        +
-
-        '&callback='
-
-        +
-
-        encodeURIComponent(
-          callbackName
-        )
-
-        +
-
-        '&t='
-
-        +
-
-        Date.now();
-
-
-      script.onerror =
-        () => {
-
-
-          cleanup();
-
-
-          reject(
-
-            new Error(
-              '写真データを取得できませんでした。'
-            )
-
-          );
-
-
-        };
-
-
-      document.body
-        .appendChild(
-          script
-        );
-
-
-    }
-
-  );
-
-}
 
 
 
