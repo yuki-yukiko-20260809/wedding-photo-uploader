@@ -1030,6 +1030,89 @@ body:has(#selectScreen.active) {
   width: 12%;
   height: 16%;
 }
+
+/* =========================================
+   動画選択後ローディング
+========================================= */
+
+.video-select-loading {
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 5000;
+
+  background:
+    rgba(248, 246, 241, 0.96);
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+
+.video-select-loading.active {
+  display: flex;
+}
+
+
+.video-select-loading-spinner {
+  width: 46px;
+  height: 46px;
+
+  border: 4px solid
+    rgba(0, 0, 0, 0.15);
+
+  border-top-color:
+    #111;
+
+  border-radius:
+    50%;
+
+  animation:
+    videoSelectLoadingSpin
+    0.8s
+    linear
+    infinite;
+}
+
+
+.video-select-loading-text {
+  font-size: 15px;
+
+  font-weight: 600;
+
+  line-height: 1.7;
+
+  text-align: center;
+
+  color: #333;
+}
+
+
+.video-select-loading-sub {
+  font-size: 12px;
+
+  font-weight: normal;
+
+  color: #777;
+}
+
+
+@keyframes videoSelectLoadingSpin {
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+
+}
   
 </style>
 
@@ -1512,7 +1595,33 @@ COMPLETE!
 
 </div>
 
+<!-- =========================================
+     動画選択後ローディング
+========================================= -->
 
+<div
+  id="videoSelectLoading"
+  class="video-select-loading"
+>
+
+  <div
+    class="video-select-loading-spinner"
+  >
+  </div>
+
+  <div
+    class="video-select-loading-text"
+  >
+    動画を読み込んでいます...
+    <div
+      class="video-select-loading-sub"
+    >
+      動画のサイズによっては<br>
+      少し時間がかかることがあります
+    </div>
+  </div>
+
+</div>
 
 <script>
 
@@ -1773,90 +1882,181 @@ function handlePhotoSelect(
 
 
 
-function handleVideoSelect(
+async function handleVideoSelect(
   event
 ) {
 
 
-  const files =
-    Array.from(
-      event.target.files
+  const loading =
+    document
+      .getElementById(
+        'videoSelectLoading'
+      );
+
+
+  /*
+   * 動画選択後、
+   * サイトへ戻った瞬間に
+   * ローディング表示
+   */
+
+  loading
+    .classList
+    .add(
+      'active'
     );
 
 
-  let sizeError =
-    false;
+  /*
+   * 一度画面描画を挟む
+   * Safari対策
+   */
 
+  await new Promise(
 
-  files.forEach(
-    file => {
+    resolve => {
 
+      requestAnimationFrame(
 
-      if (
-        !file.type
-          .startsWith(
-            'video/'
-          )
-      ) {
+        () => {
 
-        return;
+          requestAnimationFrame(
+            resolve
+          );
 
-      }
+        }
 
-
-      if (
-        file.size
-        >
-        VIDEO_MAX_BYTES
-      ) {
-
-
-        sizeError =
-          true;
-
-
-        return;
-
-      }
-
-
-      if (
-        selectedVideos.length
-        <
-        MAX_VIDEOS
-      ) {
-
-
-        selectedVideos.push(
-          file
-        );
-
-
-      }
-
+      );
 
     }
+
   );
 
 
-  event.target.value =
-    '';
+  try {
 
 
-  if (
-    sizeError
-  ) {
+    const files =
+      Array.from(
+        event.target.files
+      );
 
 
-    alert(
-      '500MBを超える動画はアップロードできません。'
+    let sizeError =
+      false;
+
+
+    files.forEach(
+
+      file => {
+
+
+        if (
+          !file.type
+            .startsWith(
+              'video/'
+            )
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          file.size
+          >
+          VIDEO_MAX_BYTES
+        ) {
+
+
+          sizeError =
+            true;
+
+
+          return;
+
+        }
+
+
+        if (
+          selectedVideos.length
+          <
+          MAX_VIDEOS
+        ) {
+
+
+          selectedVideos.push(
+            file
+          );
+
+
+        }
+
+
+      }
+
     );
 
 
+    event.target.value =
+      '';
+
+
+    if (
+      sizeError
+    ) {
+
+
+      alert(
+        '500MBを超える動画はアップロードできません。'
+      );
+
+
+    }
+
+
+    /*
+     * プレビュー画面を生成
+     */
+
+    renderPreview();
+
+
+  } catch (
+    error
+  ) {
+
+
+    console.error(
+
+      'Video select error:',
+
+      error
+
+    );
+
+
+    alert(
+      '動画の読み込みに失敗しました。'
+    );
+
+
+  } finally {
+
+
+    /*
+     * ローディング解除
+     */
+
+    loading
+      .classList
+      .remove(
+        'active'
+      );
+
+
   }
-
-
-  renderPreview();
 
 }
 
