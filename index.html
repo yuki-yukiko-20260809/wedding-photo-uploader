@@ -8410,7 +8410,40 @@ function openVideoModal(
 
 }
 
+function closeVideoModal() {
 
+  if (
+    isSingleVideoDownloading
+  ) {
+    return;
+  }
+
+  const modal =
+    document.getElementById(
+      'videoModal'
+    );
+
+  const player =
+    document.getElementById(
+      'videoPlayer'
+    );
+
+  player.pause();
+
+  player.removeAttribute(
+    'src'
+  );
+
+  player.load();
+
+  modal.classList.remove(
+    'active'
+  );
+
+  currentModalVideoItem =
+    null;
+
+}
 
 
 /* =========================================================
