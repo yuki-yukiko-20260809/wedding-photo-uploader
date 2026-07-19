@@ -1730,6 +1730,9 @@ const selectedDownloadFiles =
   let isSinglePhotoDownloading =
   false;
 
+let currentModalVideoKey =
+  null;
+
   /*
  * モーダル写真の
  * 先読みキャッシュ
@@ -7965,6 +7968,10 @@ function openImageModal(
 function openVideoModal(
   key
 ) {
+
+
+  currentModalVideoKey =
+    key;
 
 
   const player =
