@@ -698,6 +698,80 @@ button {
 }
 
 /* =========================================
+   写真モーダル
+   保存処理中の操作ロック
+========================================= */
+
+.image-modal-lock {
+  display: none;
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1100;
+
+  background:
+    rgba(0, 0, 0, 0.35);
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+
+.image-modal-lock.active {
+  display: flex;
+}
+
+
+.image-modal-lock-spinner {
+  width: 42px;
+
+  height: 42px;
+
+  border: 4px solid
+    rgba(255, 255, 255, 0.35);
+
+  border-top-color:
+    #fff;
+
+  border-radius:
+    50%;
+
+  animation:
+    imageModalLockSpin
+    0.8s
+    linear
+    infinite;
+}
+
+
+.image-modal-lock-text {
+  color: #fff;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+@keyframes imageModalLockSpin {
+
+  to {
+
+    transform:
+      rotate(360deg);
+
+  }
+
+}
+  
+/* =========================================
    トップページ
    背景画像＋透明クリックエリア
 ========================================= */
@@ -1302,27 +1376,44 @@ GALLERY
 ×
 </button>
 
-<button
-  id="modalDownloadButton"
-  class="modal-download"
-  type="button"
-  aria-label="この写真を保存"
-  onclick="
-    event.stopPropagation();
-    downloadCurrentImage();
-  "
->
-  <img
-    src="./download.png"
-    alt=""
-  >
-</button>
 
 <img
   id="modalImage"
   src=""
   alt=""
 >
+
+
+<button
+  id="modalDownloadButton"
+  class="modal-download"
+  onclick="downloadCurrentImage()"
+>
+  ↓
+</button>
+
+
+<!--
+  写真保存処理中の
+  操作ロック画面
+-->
+
+<div
+  id="imageModalLock"
+  class="image-modal-lock"
+>
+  <div
+    class="image-modal-lock-spinner"
+  >
+  </div>
+
+  <div
+    class="image-modal-lock-text"
+  >
+    写真を準備しています...
+  </div>
+</div>
+
 
 </div>
 
@@ -5630,6 +5721,11 @@ async function downloadSelectedMedia() {
 async function downloadCurrentImage() {
 
 
+  /*
+   * すでに保存処理中なら
+   * 何もしない
+   */
+
   if (
     isSinglePhotoDownloading
   ) {
@@ -5639,20 +5735,30 @@ async function downloadCurrentImage() {
   }
 
 
+  /*
+   * 写真情報確認
+   */
+
   if (
     !currentModalImageItem
     ||
     !currentModalImageItem.id
   ) {
 
+
     alert(
       '写真情報を取得できませんでした。'
     );
+
 
     return;
 
   }
 
+
+  /*
+   * ダウンロードボタン取得
+   */
 
   const button =
     document
@@ -5661,16 +5767,31 @@ async function downloadCurrentImage() {
       );
 
 
+  /*
+   * モーダル操作ロック取得
+   */
+
+  const modalLock =
+    document
+      .getElementById(
+        'imageModalLock'
+      );
+
+
   try {
 
 
     /*
-     * 二重押し防止
+     * 保存処理開始
      */
 
     isSinglePhotoDownloading =
       true;
 
+
+    /*
+     * ダウンロードボタン無効化
+     */
 
     button.disabled =
       true;
@@ -5681,6 +5802,21 @@ async function downloadCurrentImage() {
         'loading'
       );
 
+
+    /*
+     * モーダル全体を操作不可にする
+     */
+
+    modalLock
+      .classList
+      .add(
+        'active'
+      );
+
+
+    /*
+     * Workerから写真取得
+     */
 
     const photoUrl =
 
@@ -5711,15 +5847,22 @@ async function downloadCurrentImage() {
       !response.ok
     ) {
 
+
       throw new Error(
         '写真の取得に失敗しました。'
       );
 
+
     }
 
 
+    /*
+     * Blob取得
+     */
+
     const blob =
-      await response.blob();
+      await response
+        .blob();
 
 
     if (
@@ -5729,12 +5872,18 @@ async function downloadCurrentImage() {
       0
     ) {
 
+
       throw new Error(
         '写真データが空です。'
       );
 
+
     }
 
+
+    /*
+     * MIMEタイプ
+     */
 
     const mimeType =
 
@@ -5744,6 +5893,10 @@ async function downloadCurrentImage() {
 
       'image/jpeg';
 
+
+    /*
+     * ファイル名
+     */
 
     const fileName =
       sanitizeShareFileName(
@@ -5756,6 +5909,10 @@ async function downloadCurrentImage() {
 
       );
 
+
+    /*
+     * File作成
+     */
 
     const file =
       new File(
@@ -5773,6 +5930,11 @@ async function downloadCurrentImage() {
 
       );
 
+
+    /*
+     * iPhone / Android
+     * Web Share API
+     */
 
     if (
 
@@ -5796,6 +5958,10 @@ async function downloadCurrentImage() {
     ) {
 
 
+      /*
+       * OS共有画面を表示
+       */
+
       await navigator.share({
 
         files:
@@ -5812,7 +5978,8 @@ async function downloadCurrentImage() {
 
 
     /*
-     * PC等フォールバック
+     * PCなどの
+     * フォールバック
      */
 
     const objectUrl =
@@ -5852,9 +6019,11 @@ async function downloadCurrentImage() {
 
       () => {
 
+
         URL.revokeObjectURL(
           objectUrl
         );
+
 
       },
 
@@ -5869,17 +6038,28 @@ async function downloadCurrentImage() {
 
 
     console.error(
+
       'Single photo download error:',
+
       error
+
     );
 
+
+    /*
+     * ユーザーが共有画面を
+     * キャンセルした場合は
+     * エラー表示しない
+     */
 
     if (
       error.name ===
       'AbortError'
     ) {
 
+
       return;
+
 
     }
 
@@ -5893,12 +6073,16 @@ async function downloadCurrentImage() {
 
 
     /*
-     * 必ずボタンを戻す
+     * 保存処理終了
      */
 
     isSinglePhotoDownloading =
       false;
 
+
+    /*
+     * ダウンロードボタン復活
+     */
 
     button.disabled =
       false;
@@ -5908,6 +6092,18 @@ async function downloadCurrentImage() {
       .remove(
         'loading'
       );
+
+
+    /*
+     * モーダル操作ロック解除
+     */
+
+    modalLock
+      .classList
+      .remove(
+        'active'
+      );
+
 
   }
 
