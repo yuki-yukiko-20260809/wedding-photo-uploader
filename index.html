@@ -5990,29 +5990,20 @@ function updateGallerySelectionUI() {
 
 async function downloadSelectedMedia() {
 
-
   if (
-    selectedDownloadItems.size ===
-    0
+    selectedDownloadItems.size === 0
   ) {
-
 
     alert(
       '保存する写真を選択してください。'
     );
-
 
     return;
 
   }
 
 
-  /*
-   * 選択された写真のみ取得
-   */
-
   const photos =
-
     currentGalleryMedia
       .filter(
 
@@ -6025,27 +6016,22 @@ async function downloadSelectedMedia() {
 
           &&
 
-          item.type ===
-          'image'
+          item.type === 'image'
 
           &&
 
-          item.source ===
-          'drive'
+          item.source === 'drive'
 
       );
 
 
   if (
-    photos.length ===
-    0
+    photos.length === 0
   ) {
-
 
     alert(
       '保存する写真を選択してください。'
     );
-
 
     return;
 
@@ -6053,339 +6039,117 @@ async function downloadSelectedMedia() {
 
 
   const progress =
-    document
-      .getElementById(
-        'downloadProgress'
-      );
+    document.getElementById(
+      'downloadProgress'
+    );
 
 
   progress.textContent =
-    '写真を準備しています...';
-
-
-  try {
-
-
-    const files =
-      [];
-
-
-    /*
-     * 選択した写真を
-     * Cloudflare Worker経由で取得
-     */
-
-    for (
-
-      let i =
-        0;
-
-      i <
-      photos.length;
-
-      i++
-
-    ) {
-
-
-      const photo =
-        photos[i];
-
-
-      progress.textContent =
-
-        photos.length
-
-        +
-
-        '枚中 '
-
-        +
-
-        (
-          i
-          +
-          1
-        )
-
-        +
-
-        '枚を準備しています...';
-
-
-      const photoUrl =
-
-        WORKER_URL
-
-        +
-
-        '/photo'
-
-        +
-
-        '?fileId='
-
-        +
-
-        encodeURIComponent(
-          photo.id
-        );
-
-
-      const response =
-        await fetch(
-          photoUrl
-        );
-
-
-      if (
-        !response.ok
-      ) {
-
-
-        throw new Error(
-
-          '写真の取得に失敗しました。'
-
-        );
-
-
-      }
-
-
-      /*
-       * 画像をBlobとして直接取得
-       */
-
-      const blob =
-        await response.blob();
-
-
-      if (
-        !blob
-        ||
-        blob.size ===
-        0
-      ) {
-
-
-        throw new Error(
-          '写真データが空です。'
-        );
-
-
-      }
-
-
-      /*
-       * MIMEタイプ
-       */
-
-      const mimeType =
-
-        blob.type
-
-        ||
-
-        photo.mimeType
-
-        ||
-
-        'image/jpeg';
-
-
-      /*
-       * ファイル名
-       */
-
-      const fileName =
-        sanitizeShareFileName(
-
-          photo.name
-
-          ||
-
-          (
-            'wedding-photo-'
-
-            +
-
-            (
-              i
-              +
-              1
-            )
-
-            +
-
-            '.jpg'
-          )
-
-        );
-
-
-      /*
-       * File化
-       */
-
-      const file =
-        new File(
-
-          [
-            blob
-          ],
-
-          fileName,
-
-          {
-
-            type:
-              mimeType
-
-          }
-
-        );
-
-
-      files.push(
-        file
-      );
-
-
-    }
-
-
-    if (
-      files.length ===
-      0
-    ) {
-
-
-      throw new Error(
-        '写真を準備できませんでした。'
-      );
-
-
-    }
-
-
-    progress.textContent =
-      '保存画面を開いています...';
-
-
-    /*
-     * iPhone / Android
-     * Web Share API
-     */
-
-    if (
-
-      navigator.share
-
-      &&
-
-      navigator.canShare
-
-      &&
-
-      navigator.canShare({
-
-        files:
-          files
-
-      })
-
-    ) {
-
-
-      await navigator.share({
-
-        files:
-          files
-
-      });
-
-
-      progress.textContent =
-        '';
-
-
-      cancelSelectionMode();
-
-
-      return;
-
-    }
-
-
-    /*
-     * 非対応ブラウザ
-     */
-
-    progress.textContent =
-      '';
-
-
-    alert(
-      'この端末では複数写真の保存機能を利用できません。'
-    );
-
-
-  } catch (
-    error
+    photos.length
+    +
+    '枚のダウンロードを開始します...';
+
+
+  for (
+    let i = 0;
+    i < photos.length;
+    i++
   ) {
 
-
-    console.error(
-
-      'Photo share error:',
-
-      error
-
-    );
-
-
-    /*
-     * 共有画面を閉じただけの場合
-     */
-
-    if (
-      error.name ===
-      'AbortError'
-    ) {
-
-
-      progress.textContent =
-        '';
-
-
-      return;
-
-    }
+    const photo =
+      photos[i];
 
 
     progress.textContent =
-      '写真の準備に失敗しました。';
 
-
-    alert(
-
-      '写真の保存処理に失敗しました。\n'
+      photos.length
 
       +
 
+      '枚中 '
+
+      +
+
+      (i + 1)
+
+      +
+
+      '枚をダウンロードしています...';
+
+
+    const downloadUrl =
+
+      'https://drive.google.com/uc'
+
+      +
+
+      '?export=download'
+
+      +
+
+      '&id='
+
+      +
+
+      encodeURIComponent(
+        photo.id
+      );
+
+
+    const anchor =
+      document.createElement(
+        'a'
+      );
+
+
+    anchor.href =
+      downloadUrl;
+
+
+    anchor.download =
+      photo.name
+      ||
       (
-        error.message
+        'wedding-photo-'
+        +
+        (i + 1)
+        +
+        '.jpg'
+      );
 
-        ||
 
-        ''
-      )
+    anchor.style.display =
+      'none';
 
+
+    document.body
+      .appendChild(
+        anchor
+      );
+
+
+    anchor.click();
+
+
+    anchor.remove();
+
+
+    /*
+     * 連続ダウンロード対策
+     */
+
+    await sleep(
+      1200
     );
 
-
   }
+
+
+  progress.textContent =
+    'ダウンロードを開始しました。';
+
+
+  cancelSelectionMode();
 
 }
 
