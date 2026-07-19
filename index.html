@@ -1730,6 +1730,13 @@ const selectedDownloadFiles =
   let isSinglePhotoDownloading =
   false;
 
+let currentModalVideoItem =
+  null;
+
+
+let isSingleVideoDownloading =
+  false;
+
 let currentModalVideoKey =
   null;
 
@@ -7961,6 +7968,374 @@ function openImageModal(
 }
 
 /* =========================================================
+   モーダル表示中の動画を保存
+
+   スマホ：
+     Workerから動画をBlob取得
+     ↓
+     File化
+     ↓
+     navigator.share()
+
+   PC：
+     通常ダウンロード
+========================================================= */
+
+async function downloadCurrentVideo() {
+
+
+  if (
+    isSingleVideoDownloading
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    !currentModalVideoItem
+    ||
+    !currentModalVideoItem.key
+  ) {
+
+
+    alert(
+      '動画情報を取得できませんでした。'
+    );
+
+
+    return;
+
+  }
+
+
+  const button =
+    document
+      .getElementById(
+        'videoDownloadButton'
+      );
+
+
+  try {
+
+
+    isSingleVideoDownloading =
+      true;
+
+
+    button.disabled =
+      true;
+
+
+    button.classList
+      .add(
+        'loading'
+      );
+
+
+    const key =
+      currentModalVideoItem.key;
+
+
+    const fileName =
+      sanitizeShareFileName(
+
+        currentModalVideoItem.name
+
+        ||
+
+        'wedding-video.mp4'
+
+      );
+
+
+    /*
+     * スマホ判定
+     */
+
+    const isMobile =
+
+      /iPhone|iPad|iPod|Android/i
+        .test(
+          navigator.userAgent
+        );
+
+
+    /*
+     * =========================================
+     * スマホ
+     * =========================================
+     */
+
+    if (
+      isMobile
+    ) {
+
+
+      /*
+       * Workerから動画を取得
+       */
+
+      const videoUrl =
+
+        WORKER_URL
+
+        +
+
+        '/video/download'
+
+        +
+
+        '?key='
+
+        +
+
+        encodeURIComponent(
+          key
+        );
+
+
+      const response =
+        await fetch(
+          videoUrl
+        );
+
+
+      if (
+        !response.ok
+      ) {
+
+
+        throw new Error(
+          '動画の取得に失敗しました。'
+        );
+
+
+      }
+
+
+      const blob =
+        await response
+          .blob();
+
+
+      if (
+        !blob
+        ||
+        blob.size ===
+        0
+      ) {
+
+
+        throw new Error(
+          '動画データが空です。'
+        );
+
+
+      }
+
+
+      const mimeType =
+
+        blob.type
+
+        ||
+
+        'video/mp4';
+
+
+      const file =
+        new File(
+
+          [
+            blob
+          ],
+
+          fileName,
+
+          {
+
+            type:
+              mimeType
+
+          }
+
+        );
+
+
+      /*
+       * OS標準共有画面
+       */
+
+      if (
+
+        navigator.share
+
+        &&
+
+        navigator.canShare
+
+        &&
+
+        navigator.canShare({
+
+          files:
+            [
+              file
+            ]
+
+        })
+
+      ) {
+
+
+        await navigator.share({
+
+          files:
+            [
+              file
+            ]
+
+        });
+
+
+        return;
+
+      }
+
+
+      throw new Error(
+        'この端末では動画の共有保存に対応していません。'
+      );
+
+
+    }
+
+
+    /*
+     * =========================================
+     * PC
+     * 通常ダウンロード
+     * =========================================
+     */
+
+    const downloadUrl =
+
+      WORKER_URL
+
+      +
+
+      '/video/download'
+
+      +
+
+      '?key='
+
+      +
+
+      encodeURIComponent(
+        key
+      );
+
+
+    const anchor =
+      document
+        .createElement(
+          'a'
+        );
+
+
+    anchor.href =
+      downloadUrl;
+
+
+    anchor.download =
+      fileName;
+
+
+    anchor.style.display =
+      'none';
+
+
+    document.body
+      .appendChild(
+        anchor
+      );
+
+
+    anchor.click();
+
+
+    anchor.remove();
+
+
+  } catch (
+    error
+  ) {
+
+
+    console.error(
+
+      'Video save error:',
+
+      error
+
+    );
+
+
+    if (
+      error.name ===
+      'AbortError'
+    ) {
+
+
+      return;
+
+
+    }
+
+
+    alert(
+
+      '動画の保存に失敗しました。\n'
+
+      +
+
+      (
+        error.message
+
+        ||
+
+        ''
+
+      )
+
+    );
+
+
+  } finally {
+
+
+    isSingleVideoDownloading =
+      false;
+
+
+    button.disabled =
+      false;
+
+
+    button.classList
+      .remove(
+        'loading'
+      );
+
+
+  }
+
+}
+  
+/* =========================================================
    動画モーダル
 ========================================================= */
 
@@ -7970,8 +8345,37 @@ function openVideoModal(
 ) {
 
 
-  currentModalVideoKey =
-    key;
+  /*
+   * 現在の動画情報を取得
+   */
+
+  currentModalVideoItem =
+    currentGalleryMedia
+      .find(
+
+        item =>
+
+          item.type ===
+          'video'
+
+          &&
+
+          item.key ===
+          key
+
+      )
+
+    ||
+
+    {
+
+      key:
+        key,
+
+      name:
+        'wedding-video.mp4'
+
+    };
 
 
   const player =
@@ -8114,6 +8518,9 @@ function closeVideoModal() {
     );
 
 currentModalVideoKey =
+  null;
+
+currentModalVideoItem =
   null;
   
 }
