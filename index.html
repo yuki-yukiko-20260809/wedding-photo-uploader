@@ -4723,66 +4723,71 @@ function renderCombinedGallery(
       );
 
 
-      /*
-       * 写真
-       */
+/*
+ * 写真
+ */
+
+if (
+  item.type ===
+  'image'
+) {
+
+
+  const img =
+    document
+      .createElement(
+        'img'
+      );
+
+
+  img.src =
+    item.thumbnailUrl;
+
+
+  img.loading =
+    'lazy';
+
+
+  img.onclick =
+    event => {
+
+
+      event.stopPropagation();
+
 
       if (
-        item.type ===
-        'image'
+        selectionMode
       ) {
 
 
-        const img =
-          document
-            .createElement(
-              'img'
-            );
+        toggleMediaSelection(
+          item
+        );
 
 
-        img.src =
-          item.thumbnailUrl;
+        return;
+
+      }
 
 
-        img.loading =
-          'lazy';
+      openImageModal(
+        item
+      );
 
 
-        img.onclick =
-          event => {
+    };
 
 
-            event.stopPropagation();
+  /*
+   * 写真をギャラリーへ追加
+   */
+
+  element.appendChild(
+    img
+  );
 
 
-            if (
-              selectionMode
-            ) {
-
-
-              toggleMediaSelection(
-                item
-              );
-
-
-              return;
-
-            }
-
-
-            openImageModal(
-  item
-);
-            element.appendChild(
-  img
-);
-            };
-/*
- * =========================================================
- * モーダル写真
- * 元画像をバックグラウンドで先読み
- * =========================================================
- */
+}
 
 
       /*
