@@ -5375,6 +5375,217 @@ function cancelSelectionMode() {
 }
 
 /* =========================================================
+   ダウンロード用に写真を軽量化
+========================================================= */
+
+async function compressImageBlob(
+  blob,
+  fileName
+) {
+
+
+  /*
+   * Blobから画像を読み込む
+   */
+
+  const imageBitmap =
+    await createImageBitmap(
+      blob
+    );
+
+
+  const maxSize =
+    2500;
+
+
+  const originalWidth =
+    imageBitmap.width;
+
+
+  const originalHeight =
+    imageBitmap.height;
+
+
+  let width =
+    originalWidth;
+
+
+  let height =
+    originalHeight;
+
+
+  /*
+   * 長辺2500px以内に縮小
+   */
+
+  if (
+    originalWidth > maxSize
+    ||
+    originalHeight > maxSize
+  ) {
+
+
+    const ratio =
+      Math.min(
+
+        maxSize / originalWidth,
+
+        maxSize / originalHeight
+
+      );
+
+
+    width =
+      Math.round(
+        originalWidth * ratio
+      );
+
+
+    height =
+      Math.round(
+        originalHeight * ratio
+      );
+
+
+  }
+
+
+  /*
+   * Canvasへ描画
+   */
+
+  const canvas =
+    document.createElement(
+      'canvas'
+    );
+
+
+  canvas.width =
+    width;
+
+
+  canvas.height =
+    height;
+
+
+  const context =
+    canvas.getContext(
+      '2d'
+    );
+
+
+  context.drawImage(
+
+    imageBitmap,
+
+    0,
+    0,
+
+    width,
+    height
+
+  );
+
+
+  imageBitmap.close();
+
+
+  /*
+   * JPEG品質90%で圧縮
+   */
+
+  const compressedBlob =
+    await new Promise(
+
+      (
+        resolve,
+        reject
+      ) => {
+
+
+        canvas.toBlob(
+
+          result => {
+
+
+            if (
+              result
+            ) {
+
+
+              resolve(
+                result
+              );
+
+
+            } else {
+
+
+              reject(
+
+                new Error(
+                  '画像の圧縮に失敗しました。'
+                )
+
+              );
+
+
+            }
+
+
+          },
+
+          'image/jpeg',
+
+          0.90
+
+        );
+
+
+      }
+
+    );
+
+
+  /*
+   * 拡張子をjpgに統一
+   */
+
+  const baseName =
+    String(
+      fileName
+      ||
+      'wedding-photo'
+    )
+      .replace(
+        /\.[^/.]+$/,
+        ''
+      );
+
+
+  return new File(
+
+    [
+      compressedBlob
+    ],
+
+    baseName
+    +
+    '.jpg',
+
+    {
+
+      type:
+        'image/jpeg'
+
+    }
+
+  );
+
+
+}
+  
+/* =========================================================
    選択した写真をバックグラウンドで先読み
 ========================================================= */
 
@@ -5488,28 +5699,14 @@ async function preloadSelectedPhoto(
      * BlobをFileに変換
      */
 
-    const file =
-      new File(
+const file =
+  await compressImageBlob(
 
-        [
-          blob
-        ],
+    blob,
 
-        fileName,
+    fileName
 
-        {
-
-          type:
-
-            blob.type
-
-            ||
-
-            'image/jpeg'
-
-        }
-
-      );
+  );
 
 
     /*
