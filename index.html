@@ -1435,59 +1435,30 @@ COMPLETE!
   class="screen"
 >
 
-<div class="gallery-header">
+<div class="gallery-header-image-wrap">
 
-
-  <!-- 左上：戻る -->
+  <img
+    src="./ourgallery.png"
+    class="gallery-header-image"
+    alt="OUR GALLERY"
+  >
 
   <button
     type="button"
-    class="gallery-back-button"
+    class="gallery-header-hit gallery-back-hit"
     aria-label="トップに戻る"
     onclick="
       showScreen('selectScreen')
     "
-  >
-    ←
-  </button>
-
-
-  <!-- 中央タイトル -->
-
-  <div class="gallery-header-title">
-    OUR<br>
-    GALLERY
-  </div>
-
-
-  <!-- 右上：ダウンロード -->
+  ></button>
 
   <button
     id="selectionButton"
     type="button"
-    class="gallery-download-icon"
+    class="gallery-header-hit gallery-download-hit"
     aria-label="写真を選択してダウンロード"
     onclick="toggleSelectionMode()"
-  >
-    <img
-      src="./download.png"
-      alt=""
-    >
-  </button>
-
-
-</div>
-
-
-<div class="gallery-header-line">
-</div>
-
-
-<div class="gallery-intro-box">
-
-  みんなが撮影してくれた写真・動画のギャラリーです<br>
-
-  写真や動画は ご自由にダウンロードしてください
+  ></button>
 
 </div>
 
