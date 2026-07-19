@@ -6722,9 +6722,9 @@ currentModalImagePreloadPromise =
 
 
       /*
-       * 今も同じ写真なら
+       * 今も同じ写真を開いているなら
        * 成功・失敗に関係なく
-       * ローディング状態を解除
+       * 必ずボタンを復活
        */
 
       if (
@@ -6754,6 +6754,52 @@ currentModalImagePreloadPromise =
 
 
       return blob;
+
+
+    }
+
+  )
+  .catch(
+
+    error => {
+
+
+      console.warn(
+
+        'Photo preload promise error:',
+
+        error
+
+      );
+
+
+      if (
+
+        currentModalImageItem
+
+        &&
+
+        currentModalImageItem.id
+        ===
+        item.id
+
+      ) {
+
+
+        downloadButton.disabled =
+          false;
+
+
+        downloadButton.classList
+          .remove(
+            'loading'
+          );
+
+
+      }
+
+
+      return null;
 
 
     }
