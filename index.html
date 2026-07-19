@@ -655,6 +655,47 @@ button {
   z-index: 1002;
 }
 
+/* =========================================
+   モーダル写真保存ボタン
+   ローディング表示
+========================================= */
+
+.modal-download.loading {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.modal-download.loading img {
+  opacity: 0;
+}
+
+.modal-download.loading::after {
+  content: "";
+
+  position: absolute;
+
+  width: 22px;
+  height: 22px;
+
+  border: 3px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #111;
+
+  border-radius: 50%;
+
+  animation:
+    modalDownloadSpin
+    0.8s
+    linear
+    infinite;
+}
+
+@keyframes modalDownloadSpin {
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
 
 /* =========================================
    トップページ
