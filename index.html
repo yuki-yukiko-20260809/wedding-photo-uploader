@@ -1537,6 +1537,23 @@ const selectedDownloadItems =
   let isSinglePhotoDownloading =
   false;
 
+  /*
+ * モーダル写真の
+ * 先読みキャッシュ
+ */
+
+let currentModalImageBlob =
+  null;
+
+
+let currentModalImageBlobId =
+  null;
+
+
+let currentModalImagePreloadPromise =
+  null;
+
+  
 /* =========================================================
    投稿者ID
 ========================================================= */
