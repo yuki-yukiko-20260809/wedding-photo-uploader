@@ -5992,22 +5992,6 @@ async function downloadCurrentImage() {
     }
 
 
-    /*
-     * まだ先読み中なら
-     * 完了を待つ
-     */
-
-    else if (
-      currentModalImagePreloadPromise
-    ) {
-
-
-      blob =
-        await currentModalImagePreloadPromise;
-
-
-    }
-
 
     /*
      * 先読み失敗などで
@@ -6015,54 +5999,16 @@ async function downloadCurrentImage() {
      */
 
     if (
-      !blob
-    ) {
+  !blob
+) {
 
+  alert(
+    '写真を準備しています。\n少し待ってからもう一度保存ボタンを押してください。'
+  );
 
-      const photoUrl =
+  return;
 
-        WORKER_URL
-
-        +
-
-        '/photo'
-
-        +
-
-        '?fileId='
-
-        +
-
-        encodeURIComponent(
-          targetId
-        );
-
-
-      const response =
-        await fetch(
-          photoUrl
-        );
-
-
-      if (
-        !response.ok
-      ) {
-
-
-        throw new Error(
-          '写真の取得に失敗しました。'
-        );
-
-
-      }
-
-
-      blob =
-        await response
-          .blob();
-
-
-    }
+}
 
 
     if (
