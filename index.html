@@ -5093,7 +5093,7 @@ if (
 
 
               openVideoModal(
-                item.key
+                item
               );
 
 
@@ -5175,7 +5175,7 @@ if (
 
 
               openVideoModal(
-                item.key
+                item
               );
 
 
@@ -8341,41 +8341,33 @@ async function downloadCurrentVideo() {
 
 
 function openVideoModal(
-  key
+  item
 ) {
 
 
+  if (
+    !item
+    ||
+    !item.key
+  ) {
+
+
+    alert(
+      '動画情報を取得できませんでした。'
+    );
+
+
+    return;
+
+  }
+
+
   /*
-   * 現在の動画情報を取得
+   * 現在表示している動画情報を保存
    */
 
   currentModalVideoItem =
-    currentGalleryMedia
-      .find(
-
-        item =>
-
-          item.type ===
-          'video'
-
-          &&
-
-          item.key ===
-          key
-
-      )
-
-    ||
-
-    {
-
-      key:
-        key,
-
-      name:
-        'wedding-video.mp4'
-
-    };
+    item;
 
 
   const player =
@@ -8400,7 +8392,7 @@ function openVideoModal(
     +
 
     encodeURIComponent(
-      key
+      item.key
     );
 
 
