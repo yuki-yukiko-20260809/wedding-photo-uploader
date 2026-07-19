@@ -6617,18 +6617,9 @@ function openImageModal(
   item
 ) {
 
-
-  /*
-   * 現在表示中の写真情報を保存
-   */
-
   currentModalImageItem =
     item;
 
-
-  /*
-   * 前の写真のキャッシュをクリア
-   */
 
   currentModalImageBlob =
     null;
@@ -6642,9 +6633,27 @@ function openImageModal(
     null;
 
 
+  const downloadButton =
+    document
+      .getElementById(
+        'modalDownloadButton'
+      );
+
+
   /*
-   * プレビュー画像を表示
+   * 先読み完了までは
+   * 保存ボタンを無効化
    */
+
+  downloadButton.disabled =
+    true;
+
+
+  downloadButton.classList
+    .add(
+      'loading'
+    );
+
 
   document
     .getElementById(
@@ -6653,10 +6662,6 @@ function openImageModal(
     .src =
     item.previewUrl;
 
-
-  /*
-   * モーダル表示
-   */
 
   document
     .getElementById(
@@ -6669,17 +6674,62 @@ function openImageModal(
 
 
   /*
-   * 元画像をバックグラウンドで
-   * 先読み開始
+   * 元画像を先読み
    */
 
   currentModalImagePreloadPromise =
     preloadCurrentModalImage(
       item
+    )
+    .then(
+
+      blob => {
+
+
+        /*
+         * 今も同じ写真を
+         * 表示している場合のみ
+         * 保存ボタンを有効化
+         */
+
+        if (
+
+          blob
+
+          &&
+
+          currentModalImageItem
+
+          &&
+
+          currentModalImageItem.id
+          ===
+          item.id
+
+        ) {
+
+
+          downloadButton.disabled =
+            false;
+
+
+          downloadButton.classList
+            .remove(
+              'loading'
+            );
+
+
+        }
+
+
+        return blob;
+
+
+      }
+
     );
 
 }
-
 
 
 function closeImageModal() {
