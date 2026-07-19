@@ -1401,6 +1401,8 @@ const selectedDownloadItems =
   let currentModalImageItem =
   null;
 
+  let isSinglePhotoDownloading =
+  false;
 
 /* =========================================================
    投稿者ID
@@ -5588,23 +5590,55 @@ async function downloadCurrentImage() {
 
 
   if (
-    !currentModalImageItem
-    ||
-    !currentModalImageItem.id
+    isSinglePhotoDownloading
   ) {
-
-
-    alert(
-      '写真情報を取得できませんでした。'
-    );
-
 
     return;
 
   }
 
 
+  if (
+    !currentModalImageItem
+    ||
+    !currentModalImageItem.id
+  ) {
+
+    alert(
+      '写真情報を取得できませんでした。'
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document
+      .getElementById(
+        'modalDownloadButton'
+      );
+
+
   try {
+
+
+    /*
+     * 二重押し防止
+     */
+
+    isSinglePhotoDownloading =
+      true;
+
+
+    button.disabled =
+      true;
+
+
+    button.classList
+      .add(
+        'loading'
+      );
 
 
     const photoUrl =
@@ -5636,18 +5670,29 @@ async function downloadCurrentImage() {
       !response.ok
     ) {
 
-
       throw new Error(
         '写真の取得に失敗しました。'
       );
-
 
     }
 
 
     const blob =
-      await response
-        .blob();
+      await response.blob();
+
+
+    if (
+      !blob
+      ||
+      blob.size ===
+      0
+    ) {
+
+      throw new Error(
+        '写真データが空です。'
+      );
+
+    }
 
 
     const mimeType =
@@ -5688,10 +5733,6 @@ async function downloadCurrentImage() {
       );
 
 
-    /*
-     * iPhone / Android
-     */
-
     if (
 
       navigator.share
@@ -5730,7 +5771,7 @@ async function downloadCurrentImage() {
 
 
     /*
-     * PCなどのフォールバック
+     * PC等フォールバック
      */
 
     const objectUrl =
@@ -5770,11 +5811,9 @@ async function downloadCurrentImage() {
 
       () => {
 
-
         URL.revokeObjectURL(
           objectUrl
         );
-
 
       },
 
@@ -5789,14 +5828,45 @@ async function downloadCurrentImage() {
 
 
     console.error(
+      'Single photo download error:',
       error
     );
+
+
+    if (
+      error.name ===
+      'AbortError'
+    ) {
+
+      return;
+
+    }
 
 
     alert(
       '写真の保存に失敗しました。'
     );
 
+
+  } finally {
+
+
+    /*
+     * 必ずボタンを戻す
+     */
+
+    isSinglePhotoDownloading =
+      false;
+
+
+    button.disabled =
+      false;
+
+
+    button.classList
+      .remove(
+        'loading'
+      );
 
   }
 
