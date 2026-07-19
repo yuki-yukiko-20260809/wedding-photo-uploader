@@ -4708,7 +4708,160 @@ function renderCombinedGallery(
             openImageModal(
   item
 );
+/*
+ * =========================================================
+ * モーダル写真
+ * 元画像をバックグラウンドで先読み
+ * =========================================================
+ */
 
+async function preloadCurrentModalImage(
+  item
+) {
+
+
+  try {
+
+
+    /*
+     * 写真ID確認
+     */
+
+    if (
+      !item
+      ||
+      !item.id
+    ) {
+
+
+      return null;
+
+
+    }
+
+
+    const targetId =
+      item.id;
+
+
+    /*
+     * Workerから元画像取得
+     */
+
+    const photoUrl =
+
+      WORKER_URL
+
+      +
+
+      '/photo'
+
+      +
+
+      '?fileId='
+
+      +
+
+      encodeURIComponent(
+        targetId
+      );
+
+
+    const response =
+      await fetch(
+        photoUrl
+      );
+
+
+    if (
+      !response.ok
+    ) {
+
+
+      throw new Error(
+        '写真の先読みに失敗しました。'
+      );
+
+
+    }
+
+
+    const blob =
+      await response
+        .blob();
+
+
+    if (
+      !blob
+      ||
+      blob.size ===
+      0
+    ) {
+
+
+      throw new Error(
+        '写真データが空です。'
+      );
+
+
+    }
+
+
+    /*
+     * 先読み中に別の写真を
+     * 開いていないか確認
+     */
+
+    if (
+      !currentModalImageItem
+      ||
+      currentModalImageItem.id
+      !==
+      targetId
+    ) {
+
+
+      return blob;
+
+
+    }
+
+
+    /*
+     * キャッシュ保存
+     */
+
+    currentModalImageBlob =
+      blob;
+
+
+    currentModalImageBlobId =
+      targetId;
+
+
+    return blob;
+
+
+  } catch (
+    error
+  ) {
+
+
+    console.warn(
+
+      'Photo preload failed:',
+
+      error
+
+    );
+
+
+    return null;
+
+
+  }
+
+}
 
           };
 
@@ -5738,11 +5891,6 @@ async function downloadSelectedMedia() {
 async function downloadCurrentImage() {
 
 
-  /*
-   * すでに保存処理中なら
-   * 何もしない
-   */
-
   if (
     isSinglePhotoDownloading
   ) {
@@ -5751,10 +5899,6 @@ async function downloadCurrentImage() {
 
   }
 
-
-  /*
-   * 写真情報確認
-   */
 
   if (
     !currentModalImageItem
@@ -5773,20 +5917,12 @@ async function downloadCurrentImage() {
   }
 
 
-  /*
-   * ダウンロードボタン取得
-   */
-
   const button =
     document
       .getElementById(
         'modalDownloadButton'
       );
 
-
-  /*
-   * モーダル操作ロック取得
-   */
 
   const modalLock =
     document
@@ -5798,17 +5934,9 @@ async function downloadCurrentImage() {
   try {
 
 
-    /*
-     * 保存処理開始
-     */
-
     isSinglePhotoDownloading =
       true;
 
-
-    /*
-     * ダウンロードボタン無効化
-     */
 
     button.disabled =
       true;
@@ -5820,10 +5948,6 @@ async function downloadCurrentImage() {
       );
 
 
-    /*
-     * モーダル全体を操作不可にする
-     */
-
     modalLock
       .classList
       .add(
@@ -5832,54 +5956,113 @@ async function downloadCurrentImage() {
 
 
     /*
-     * Workerから写真取得
+     * 現在の写真IDを保持
      */
 
-    const photoUrl =
-
-      WORKER_URL
-
-      +
-
-      '/photo'
-
-      +
-
-      '?fileId='
-
-      +
-
-      encodeURIComponent(
-        currentModalImageItem.id
-      );
+    const targetId =
+      currentModalImageItem.id;
 
 
-    const response =
-      await fetch(
-        photoUrl
-      );
+    /*
+     * キャッシュ済みなら
+     * そのBlobを使用
+     */
+
+    let blob =
+      null;
 
 
     if (
-      !response.ok
+
+      currentModalImageBlob
+
+      &&
+
+      currentModalImageBlobId
+      ===
+      targetId
+
     ) {
 
 
-      throw new Error(
-        '写真の取得に失敗しました。'
-      );
+      blob =
+        currentModalImageBlob;
 
 
     }
 
 
     /*
-     * Blob取得
+     * まだ先読み中なら
+     * 完了を待つ
      */
 
-    const blob =
-      await response
-        .blob();
+    else if (
+      currentModalImagePreloadPromise
+    ) {
+
+
+      blob =
+        await currentModalImagePreloadPromise;
+
+
+    }
+
+
+    /*
+     * 先読み失敗などで
+     * Blobがない場合は再取得
+     */
+
+    if (
+      !blob
+    ) {
+
+
+      const photoUrl =
+
+        WORKER_URL
+
+        +
+
+        '/photo'
+
+        +
+
+        '?fileId='
+
+        +
+
+        encodeURIComponent(
+          targetId
+        );
+
+
+      const response =
+        await fetch(
+          photoUrl
+        );
+
+
+      if (
+        !response.ok
+      ) {
+
+
+        throw new Error(
+          '写真の取得に失敗しました。'
+        );
+
+
+      }
+
+
+      blob =
+        await response
+          .blob();
+
+
+    }
 
 
     if (
@@ -5898,10 +6081,6 @@ async function downloadCurrentImage() {
     }
 
 
-    /*
-     * MIMEタイプ
-     */
-
     const mimeType =
 
       blob.type
@@ -5910,10 +6089,6 @@ async function downloadCurrentImage() {
 
       'image/jpeg';
 
-
-    /*
-     * ファイル名
-     */
 
     const fileName =
       sanitizeShareFileName(
@@ -5926,10 +6101,6 @@ async function downloadCurrentImage() {
 
       );
 
-
-    /*
-     * File作成
-     */
 
     const file =
       new File(
@@ -5950,7 +6121,6 @@ async function downloadCurrentImage() {
 
     /*
      * iPhone / Android
-     * Web Share API
      */
 
     if (
@@ -5975,10 +6145,6 @@ async function downloadCurrentImage() {
     ) {
 
 
-      /*
-       * OS共有画面を表示
-       */
-
       await navigator.share({
 
         files:
@@ -5995,8 +6161,7 @@ async function downloadCurrentImage() {
 
 
     /*
-     * PCなどの
-     * フォールバック
+     * PCなど
      */
 
     const objectUrl =
@@ -6063,12 +6228,6 @@ async function downloadCurrentImage() {
     );
 
 
-    /*
-     * ユーザーが共有画面を
-     * キャンセルした場合は
-     * エラー表示しない
-     */
-
     if (
       error.name ===
       'AbortError'
@@ -6089,17 +6248,9 @@ async function downloadCurrentImage() {
   } finally {
 
 
-    /*
-     * 保存処理終了
-     */
-
     isSinglePhotoDownloading =
       false;
 
-
-    /*
-     * ダウンロードボタン復活
-     */
 
     button.disabled =
       false;
@@ -6111,10 +6262,6 @@ async function downloadCurrentImage() {
       );
 
 
-    /*
-     * モーダル操作ロック解除
-     */
-
     modalLock
       .classList
       .remove(
@@ -6125,7 +6272,6 @@ async function downloadCurrentImage() {
   }
 
 }
-
 
 /* =========================================================
    共有用ファイル名を安全化
@@ -6539,6 +6685,22 @@ function openImageModal(
 function closeImageModal() {
 
 
+  /*
+   * 保存処理中は
+   * モーダルを閉じない
+   */
+
+  if (
+    isSinglePhotoDownloading
+  ) {
+
+
+    return;
+
+
+  }
+
+
   document
     .getElementById(
       'imageModal'
@@ -6548,26 +6710,37 @@ function closeImageModal() {
       'active'
     );
 
-}
+
+  /*
+   * 表示画像をクリア
+   */
+
+  document
+    .getElementById(
+      'modalImage'
+    )
+    .src =
+    '';
 
 
+  /*
+   * 写真情報とキャッシュをクリア
+   */
 
-function closeImageModalBackground(
-  event
-) {
-
-
-  if (
-    event.target.id
-    ===
-    'imageModal'
-  ) {
+  currentModalImageItem =
+    null;
 
 
-    closeImageModal();
+  currentModalImageBlob =
+    null;
 
 
-  }
+  currentModalImageBlobId =
+    null;
+
+
+  currentModalImagePreloadPromise =
+    null;
 
 }
 
