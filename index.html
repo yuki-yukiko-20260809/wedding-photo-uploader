@@ -1705,6 +1705,9 @@ let selectionMode =
 const selectedDownloadItems =
   new Set();
 
+const selectedDownloadFiles =
+  new Map();
+
   let currentModalImageItem =
   null;
 
@@ -5356,7 +5359,196 @@ function cancelSelectionMode() {
 
 }
 
+/* =========================================================
+   選択した写真をバックグラウンドで先読み
+========================================================= */
 
+async function preloadSelectedPhoto(
+  item
+) {
+
+
+  try {
+
+
+    /*
+     * 写真情報確認
+     */
+
+    if (
+      !item
+      ||
+      !item.id
+    ) {
+
+      return;
+
+    }
+
+
+    /*
+     * Worker経由で
+     * Google Driveの元写真を取得
+     */
+
+    const photoUrl =
+
+      WORKER_URL
+
+      +
+
+      '/photo'
+
+      +
+
+      '?fileId='
+
+      +
+
+      encodeURIComponent(
+        item.id
+      );
+
+
+    const response =
+      await fetch(
+        photoUrl
+      );
+
+
+    if (
+      !response.ok
+    ) {
+
+
+      throw new Error(
+        '写真の取得に失敗しました。'
+      );
+
+
+    }
+
+
+    /*
+     * Blobとして取得
+     */
+
+    const blob =
+      await response.blob();
+
+
+    if (
+      !blob
+      ||
+      blob.size ===
+      0
+    ) {
+
+
+      throw new Error(
+        '写真データが空です。'
+      );
+
+
+    }
+
+
+    /*
+     * ファイル名
+     */
+
+    const fileName =
+      sanitizeShareFileName(
+
+        item.name
+
+        ||
+
+        'wedding-photo.jpg'
+
+      );
+
+
+    /*
+     * BlobをFileに変換
+     */
+
+    const file =
+      new File(
+
+        [
+          blob
+        ],
+
+        fileName,
+
+        {
+
+          type:
+
+            blob.type
+
+            ||
+
+            'image/jpeg'
+
+        }
+
+      );
+
+
+    /*
+     * 準備済み写真として保存
+     */
+
+    selectedDownloadFiles
+      .set(
+
+        item.uniqueId,
+
+        file
+
+      );
+
+
+    /*
+     * UI更新
+     */
+
+    updateGallerySelectionUI();
+
+
+  } catch (
+    error
+  ) {
+
+
+    console.error(
+
+      'Selected photo preload error:',
+
+      error
+
+    );
+
+
+    /*
+     * 失敗した場合は
+     * キャッシュから削除
+     */
+
+    selectedDownloadFiles
+      .delete(
+        item.uniqueId
+      );
+
+
+    updateGallerySelectionUI();
+
+
+  }
+
+}
 
 function toggleMediaSelection(
   item
@@ -5384,6 +5576,12 @@ function toggleMediaSelection(
   }
 
 
+  /*
+   * すでに選択済みの場合
+   * ↓
+   * 選択解除
+   */
+
   if (
     selectedDownloadItems
       .has(
@@ -5398,13 +5596,42 @@ function toggleMediaSelection(
       );
 
 
-  } else {
+    /*
+     * 先読み済みデータも削除
+     */
+
+    selectedDownloadFiles
+      .delete(
+        item.uniqueId
+      );
+
+
+  }
+
+
+  /*
+   * 未選択の場合
+   * ↓
+   * 選択
+   */
+
+  else {
 
 
     selectedDownloadItems
       .add(
         item.uniqueId
       );
+
+
+    /*
+     * この瞬間から
+     * 元画像の先読みを開始
+     */
+
+    preloadSelectedPhoto(
+      item
+    );
 
 
   }
