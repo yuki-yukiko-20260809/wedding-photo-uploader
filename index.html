@@ -1113,6 +1113,11 @@ body:has(#selectScreen.active) {
   }
 
 }
+
+#downloadSelectedButton:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
   
 </style>
 
@@ -1442,8 +1447,10 @@ COMPLETE!
 
 
 <button
+  id="downloadSelectedButton"
   class="primary"
   onclick="downloadSelectedMedia()"
+  disabled
 >
 選択した写真を保存
 </button>
@@ -5347,6 +5354,14 @@ function cancelSelectionMode() {
     .clear();
 
 
+  /*
+   * 先読み済みファイルもクリア
+   */
+
+  selectedDownloadFiles
+    .clear();
+
+
   document
     .getElementById(
       'downloadProgress'
@@ -5667,6 +5682,24 @@ function updateGallerySelectionUI() {
       );
 
 
+  const downloadButton =
+    document
+      .getElementById(
+        'downloadSelectedButton'
+      );
+
+
+  const progress =
+    document
+      .getElementById(
+        'downloadProgress'
+      );
+
+
+  /*
+   * 選択モードの表示切り替え
+   */
+
   if (
     selectionMode
   ) {
@@ -5677,11 +5710,6 @@ function updateGallerySelectionUI() {
         'active'
       );
 
-
-    /*
-     * download.pngは消さず
-     * aria-labelだけ変更
-     */
 
     selectionButton
       .setAttribute(
@@ -5709,6 +5737,10 @@ function updateGallerySelectionUI() {
   }
 
 
+  /*
+   * 選択件数
+   */
+
   count.textContent =
 
     selectedDownloadItems.size
@@ -5717,6 +5749,11 @@ function updateGallerySelectionUI() {
 
     '件選択中';
 
+
+  /*
+   * ギャラリーの
+   * ✔表示を更新
+   */
 
   document
     .querySelectorAll(
@@ -5782,7 +5819,7 @@ function updateGallerySelectionUI() {
 
 
         /*
-         * 選択中は削除ボタン非表示
+         * 選択中は削除ボタンを隠す
          */
 
         const deleteButton =
@@ -5816,6 +5853,131 @@ function updateGallerySelectionUI() {
       }
 
     );
+
+
+  /*
+   * =========================================
+   * ここから写真の準備状況
+   * =========================================
+   */
+
+
+  const selectedCount =
+    selectedDownloadItems.size;
+
+
+  let readyCount =
+    0;
+
+
+  /*
+   * 選択中の写真のうち、
+   * 何枚先読み完了しているか数える
+   */
+
+  selectedDownloadItems
+    .forEach(
+
+      uniqueId => {
+
+
+        if (
+          selectedDownloadFiles
+            .has(
+              uniqueId
+            )
+        ) {
+
+
+          readyCount++;
+
+
+        }
+
+
+      }
+
+    );
+
+
+  /*
+   * 0枚選択
+   */
+
+  if (
+    selectedCount ===
+    0
+  ) {
+
+
+    downloadButton.disabled =
+      true;
+
+
+    progress.textContent =
+      '';
+
+
+  }
+
+
+  /*
+   * まだ先読み中
+   */
+
+  else if (
+    readyCount
+    <
+    selectedCount
+  ) {
+
+
+    downloadButton.disabled =
+      true;
+
+
+    progress.textContent =
+
+      selectedCount
+
+      +
+
+      '枚中 '
+
+      +
+
+      readyCount
+
+      +
+
+      '枚を準備しています...';
+
+
+  }
+
+
+  /*
+   * 全部準備完了
+   */
+
+  else {
+
+
+    downloadButton.disabled =
+      false;
+
+
+    progress.textContent =
+
+      selectedCount
+
+      +
+
+      '枚の準備ができました';
+
+
+  }
+
 
 }
 
