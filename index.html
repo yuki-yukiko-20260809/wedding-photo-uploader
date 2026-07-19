@@ -6178,19 +6178,19 @@ function updateGallerySelectionUI() {
 
 }
 
-
 /* =========================================================
    選択した写真をまとめて保存
-   Blob URL + a.download方式
-========================================================= */
 
+   スマホ：
+     navigator.share() で
+     OS標準の共有画面へ渡す
+
+   PC：
+     Blob URL + a.download
+========================================================= */
 
 async function downloadSelectedMedia() {
 
-
-  /*
-   * 何も選択されていない場合
-   */
 
   if (
     selectedDownloadItems.size ===
@@ -6268,28 +6268,26 @@ async function downloadSelectedMedia() {
 
 
   /*
-   * 二重クリック防止
+   * 二重操作防止
    */
 
   downloadButton.disabled =
     true;
 
 
-  progress.textContent =
-
-    photos.length
-
-    +
-
-    '枚のダウンロードを開始します...';
-
-
   try {
+
+
+    const files =
+      [];
 
 
     /*
      * 選択した写真を
-     * 1枚ずつダウンロード
+     * selectedDownloadFiles から取得
+     *
+     * ここには選択時に
+     * 先読み＋軽量化されたFileが入っている
      */
 
     for (
@@ -6327,15 +6325,10 @@ async function downloadSelectedMedia() {
 
         +
 
-        '枚をダウンロードしています...';
+        '枚を確認しています...';
 
 
-      /*
-       * 選択時に先読み済みの
-       * Fileオブジェクトを取得
-       */
-
-      const file =
+      let file =
 
         selectedDownloadFiles
           .get(
@@ -6343,47 +6336,362 @@ async function downloadSelectedMedia() {
           );
 
 
+      /*
+       * 万が一まだ準備できていない場合
+       * その場で取得＋軽量化
+       */
+
       if (
         !file
       ) {
 
 
-        throw new Error(
+        const photoUrl =
 
-          (
-            i
-            +
-            1
-          )
+          WORKER_URL
 
           +
 
-          '枚目の写真データを取得できませんでした。'
+          '/photo'
 
-        );
+          +
+
+          '?fileId='
+
+          +
+
+          encodeURIComponent(
+            photo.id
+          );
+
+
+        const response =
+          await fetch(
+            photoUrl
+          );
+
+
+        if (
+          !response.ok
+        ) {
+
+
+          throw new Error(
+            '写真の取得に失敗しました。'
+          );
+
+
+        }
+
+
+        const blob =
+          await response
+            .blob();
+
+
+        if (
+          !blob
+          ||
+          blob.size ===
+          0
+        ) {
+
+
+          throw new Error(
+            '写真データが空です。'
+          );
+
+
+        }
+
+
+        const fileName =
+          sanitizeShareFileName(
+
+            photo.name
+
+            ||
+
+            (
+
+              'wedding-photo-'
+
+              +
+
+              (
+                i
+                +
+                1
+              )
+
+              +
+
+              '.jpg'
+
+            )
+
+          );
+
+
+        /*
+         * 軽量化
+         */
+
+        file =
+          await compressImageBlob(
+
+            blob,
+
+            fileName
+
+          );
+
+
+        /*
+         * キャッシュ
+         */
+
+        selectedDownloadFiles
+          .set(
+
+            photo.uniqueId,
+
+            file
+
+          );
 
 
       }
 
 
+      files.push(
+        file
+      );
+
+
+    }
+
+
+    if (
+      files.length ===
+      0
+    ) {
+
+
+      throw new Error(
+        '写真を準備できませんでした。'
+      );
+
+
+    }
+
+
+    /*
+     * デバッグ用
+     * 合計サイズ確認
+     */
+
+    const totalBytes =
+      files.reduce(
+
+        (
+          total,
+          file
+        ) => {
+
+          return (
+            total
+            +
+            file.size
+          );
+
+        },
+
+        0
+
+      );
+
+
+    console.log(
+
+      '保存対象：'
+
+      +
+
+      files.length
+
+      +
+
+      '枚 / '
+
+      +
+
+      (
+        totalBytes
+        /
+        1024
+        /
+        1024
+      )
+        .toFixed(
+          2
+        )
+
+      +
+
+      'MB'
+
+    );
+
+
+    /*
+     * =========================================
+     * スマホ判定
+     * =========================================
+     */
+
+    const isMobile =
+
+      /iPhone|iPad|iPod|Android/i
+        .test(
+          navigator.userAgent
+        );
+
+
+    /*
+     * =========================================
+     * スマホ
+     *
+     * OS標準の共有シートへ
+     * 複数画像をまとめて渡す
+     * =========================================
+     */
+
+    if (
+      isMobile
+    ) {
+
+
+      progress.textContent =
+        '保存画面を開いています...';
+
+
+      if (
+
+        navigator.share
+
+        &&
+
+        navigator.canShare
+
+        &&
+
+        navigator.canShare({
+
+          files:
+            files
+
+        })
+
+      ) {
+
+
+        await navigator.share({
+
+          files:
+            files
+
+        });
+
+
+        progress.textContent =
+          '';
+
+
+        cancelSelectionMode();
+
+
+        return;
+
+      }
+
+
       /*
-       * FileからBlob URLを作成
+       * スマホなのに
+       * 複数ファイル共有非対応
        */
 
-      const objectUrl =
+      throw new Error(
+        'この端末では複数写真の保存機能を利用できません。'
+      );
 
+
+    }
+
+
+    /*
+     * =========================================
+     * PC
+     *
+     * Blob URL + a.download
+     * =========================================
+     */
+
+    progress.textContent =
+
+      files.length
+
+      +
+
+      '枚のダウンロードを開始します...';
+
+
+    for (
+
+      let i =
+        0;
+
+      i <
+      files.length;
+
+      i++
+
+    ) {
+
+
+      const file =
+        files[i];
+
+
+      progress.textContent =
+
+        files.length
+
+        +
+
+        '枚中 '
+
+        +
+
+        (
+          i
+          +
+          1
+        )
+
+        +
+
+        '枚をダウンロードしています...';
+
+
+      const objectUrl =
         URL
           .createObjectURL(
             file
           );
 
 
-      /*
-       * ダウンロード用aタグを作成
-       */
-
       const anchor =
-
         document
           .createElement(
             'a'
@@ -6423,37 +6731,20 @@ async function downloadSelectedMedia() {
         'none';
 
 
-      /*
-       * DOMへ追加
-       */
-
       document.body
         .appendChild(
           anchor
         );
 
 
-      /*
-       * ダウンロード実行
-       */
-
       anchor.click();
 
-
-      /*
-       * aタグ削除
-       */
 
       anchor.remove();
 
 
       /*
-       * Blob URLを少し後で解放
-       *
-       * 即座にrevokeすると
-       * スマホブラウザで
-       * ダウンロード前にURLが
-       * 無効になる可能性があるため
+       * 少し後でBlob URL解放
        */
 
       setTimeout(
@@ -6475,14 +6766,12 @@ async function downloadSelectedMedia() {
 
 
       /*
-       * 連続ダウンロードの間隔
-       *
-       * ブラウザ側で処理する時間を
-       * 少し確保する
+       * PCブラウザの
+       * 連続ダウンロード処理待ち
        */
 
       await sleep(
-        800
+        500
       );
 
 
@@ -6490,18 +6779,8 @@ async function downloadSelectedMedia() {
 
 
     progress.textContent =
+      'ダウンロードを開始しました。';
 
-      photos.length
-
-      +
-
-      '枚のダウンロードを開始しました。';
-
-
-    /*
-     * 少し待ってから
-     * 選択モードを終了
-     */
 
     await sleep(
       1000
@@ -6518,20 +6797,44 @@ async function downloadSelectedMedia() {
 
     console.error(
 
-      'Multiple photo download error:',
+      'Multiple photo save error:',
 
       error
 
     );
 
 
+    /*
+     * 共有画面を
+     * ユーザーが閉じただけの場合
+     */
+
+    if (
+      error.name ===
+      'AbortError'
+    ) {
+
+
+      progress.textContent =
+        '';
+
+
+      downloadButton.disabled =
+        false;
+
+
+      return;
+
+    }
+
+
     progress.textContent =
-      '写真のダウンロードに失敗しました。';
+      '写真の保存に失敗しました。';
 
 
     alert(
 
-      '写真のダウンロードに失敗しました。\n'
+      '写真の保存処理に失敗しました。\n'
 
       +
 
@@ -6547,11 +6850,6 @@ async function downloadSelectedMedia() {
     );
 
 
-    /*
-     * エラー時は
-     * ボタンを再度有効化
-     */
-
     downloadButton.disabled =
       false;
 
@@ -6560,6 +6858,7 @@ async function downloadSelectedMedia() {
 
 
 }
+
 
 /* =========================================================
    モーダル表示中の写真を1枚保存
