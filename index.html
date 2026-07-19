@@ -4784,34 +4784,45 @@ async function preloadCurrentModalImage(
   item
 ) {
 
+  if (
+    !item
+    ||
+    !item.id
+  ) {
+
+    return null;
+
+  }
+
+
+  const targetId =
+    item.id;
+
+
+  /*
+   * 5秒でタイムアウト
+   */
+
+  const controller =
+    new AbortController();
+
+
+  const timeoutId =
+    setTimeout(
+
+      () => {
+
+        controller.abort();
+
+      },
+
+      3000
+
+    );
+
 
   try {
 
-
-    /*
-     * 写真ID確認
-     */
-
-    if (
-      !item
-      ||
-      !item.id
-    ) {
-
-
-      return null;
-
-
-    }
-
-
-    const targetId =
-      item.id;
-
-
-    /*
-     * Workerから元画像取得
-     */
 
     const photoUrl =
 
@@ -4834,7 +4845,14 @@ async function preloadCurrentModalImage(
 
     const response =
       await fetch(
-        photoUrl
+
+        photoUrl,
+
+        {
+          signal:
+            controller.signal
+        }
+
       );
 
 
@@ -4842,18 +4860,15 @@ async function preloadCurrentModalImage(
       !response.ok
     ) {
 
-
       throw new Error(
         '写真の先読みに失敗しました。'
       );
-
 
     }
 
 
     const blob =
-      await response
-        .blob();
+      await response.blob();
 
 
     if (
@@ -4863,18 +4878,16 @@ async function preloadCurrentModalImage(
       0
     ) {
 
-
       throw new Error(
         '写真データが空です。'
       );
-
 
     }
 
 
     /*
-     * 先読み中に別の写真を
-     * 開いていないか確認
+     * 別の写真に切り替わっていたら
+     * キャッシュしない
      */
 
     if (
@@ -4885,16 +4898,10 @@ async function preloadCurrentModalImage(
       targetId
     ) {
 
-
-      return blob;
-
+      return null;
 
     }
 
-
-    /*
-     * キャッシュ保存
-     */
 
     currentModalImageBlob =
       blob;
@@ -4912,17 +4919,34 @@ async function preloadCurrentModalImage(
   ) {
 
 
-    console.warn(
+    if (
+      error.name ===
+      'AbortError'
+    ) {
 
-      'Photo preload failed:',
+      console.warn(
+        'Photo preload timeout'
+      );
 
-      error
+    } else {
 
-    );
+      console.warn(
+        'Photo preload failed:',
+        error
+      );
+
+    }
 
 
     return null;
 
+
+  } finally {
+
+
+    clearTimeout(
+      timeoutId
+    );
 
   }
 
@@ -6688,59 +6712,53 @@ function openImageModal(
    * 元画像を先読み
    */
 
-  currentModalImagePreloadPromise =
-    preloadCurrentModalImage(
-      item
-    )
-    .then(
+currentModalImagePreloadPromise =
+  preloadCurrentModalImage(
+    item
+  )
+  .then(
 
-      blob => {
-
-
-        /*
-         * 今も同じ写真を
-         * 表示している場合のみ
-         * 保存ボタンを有効化
-         */
-
-        if (
-
-          blob
-
-          &&
-
-          currentModalImageItem
-
-          &&
-
-          currentModalImageItem.id
-          ===
-          item.id
-
-        ) {
+    blob => {
 
 
-          downloadButton.disabled =
-            false;
+      /*
+       * 今も同じ写真なら
+       * 成功・失敗に関係なく
+       * ローディング状態を解除
+       */
+
+      if (
+
+        currentModalImageItem
+
+        &&
+
+        currentModalImageItem.id
+        ===
+        item.id
+
+      ) {
 
 
-          downloadButton.classList
-            .remove(
-              'loading'
-            );
+        downloadButton.disabled =
+          false;
 
 
-        }
-
-
-        return blob;
+        downloadButton.classList
+          .remove(
+            'loading'
+          );
 
 
       }
 
-    );
 
-}
+      return blob;
+
+
+    }
+
+  );
 
 
 function closeImageModal() {
