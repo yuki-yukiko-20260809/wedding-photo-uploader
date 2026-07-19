@@ -6469,22 +6469,49 @@ async function confirmDeleteR2Video(
 
 
 function openImageModal(
-  imageUrl,
   item
 ) {
 
 
+  /*
+   * 現在表示中の写真情報を保存
+   */
+
   currentModalImageItem =
     item;
 
+
+  /*
+   * 前の写真のキャッシュをクリア
+   */
+
+  currentModalImageBlob =
+    null;
+
+
+  currentModalImageBlobId =
+    null;
+
+
+  currentModalImagePreloadPromise =
+    null;
+
+
+  /*
+   * プレビュー画像を表示
+   */
 
   document
     .getElementById(
       'modalImage'
     )
     .src =
-    imageUrl;
+    item.previewUrl;
 
+
+  /*
+   * モーダル表示
+   */
 
   document
     .getElementById(
@@ -6493,6 +6520,17 @@ function openImageModal(
     .classList
     .add(
       'active'
+    );
+
+
+  /*
+   * 元画像をバックグラウンドで
+   * 先読み開始
+   */
+
+  currentModalImagePreloadPromise =
+    preloadCurrentModalImage(
+      item
     );
 
 }
