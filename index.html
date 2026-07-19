@@ -1248,7 +1248,32 @@ COMPLETE!
   class="screen"
 >
 
-<div class="gallery-topbar">
+<div class="gallery-header">
+
+
+  <!-- 左上：戻る -->
+
+  <button
+    type="button"
+    class="gallery-back-button"
+    aria-label="トップに戻る"
+    onclick="
+      showScreen('selectScreen')
+    "
+  >
+    ←
+  </button>
+
+
+  <!-- 中央タイトル -->
+
+  <div class="gallery-header-title">
+    OUR<br>
+    GALLERY
+  </div>
+
+
+  <!-- 右上：ダウンロード -->
 
   <button
     id="selectionButton"
@@ -1263,21 +1288,38 @@ COMPLETE!
     >
   </button>
 
+
 </div>
 
 
-<h1>
-OUR<br>
-GALLERY
-</h1>
+<div class="gallery-header-line">
+</div>
 
 
-<div class="line"></div>
+<div class="gallery-intro-box">
+
+  みんなが撮影してくれた写真・動画のギャラリーです<br>
+
+  写真や動画は ご自由にダウンロードしてください
+
+</div>
 
 
-<p>
-みんなが撮影した写真・動画
-</p>
+<div class="gallery-notice">
+
+  <div>
+    ※アクセスが集中している場合 読み込みに時間がかかったり エラーが表示されたりすることがあります
+  </div>
+
+  <div>
+    ※その際は お手数ですがもう一度QRコードを読み取り 少し時間をおいてからゆっくり操作をお試しください
+  </div>
+
+  <div>
+    ※右上に「×」がある写真・動画は ご自身がアップロードしたもので 削除可能です
+  </div>
+
+</div>
 
 
 <div
