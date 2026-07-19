@@ -963,190 +963,73 @@ body:has(#selectScreen.active) {
 
 /* =========================================
    ギャラリーヘッダー
+   画像ベース
 ========================================= */
 
-.gallery-header {
+.gallery-header-image-wrap {
   position: relative;
 
   width: 100%;
 
-  min-height: 150px;
+  margin: 0 auto 16px;
 
-  display: flex;
-
-  align-items: flex-start;
-
-  justify-content: center;
-
-  padding-top: 10px;
+  line-height: 0;
 }
 
 
-.gallery-header-title {
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
+.gallery-header-image {
+  display: block;
 
-  font-size: 42px;
+  width: 100%;
+  height: auto;
 
-  font-weight: normal;
+  user-select: none;
+  -webkit-user-select: none;
 
-  line-height: 1.15;
-
-  letter-spacing: 3px;
-
-  text-align: center;
-
-  color: #111;
+  pointer-events: none;
 }
 
 
-/* 左上 戻る */
+/* 透明クリックエリア */
 
-.gallery-back-button {
+.gallery-header-hit {
   position: absolute;
 
-  top: 0;
-  left: 0;
-
-  width: 46px;
-  height: 46px;
-
-  padding: 0;
-
-  border: 3px solid #444;
-
-  border-radius: 50%;
-
-  background: transparent;
-
-  color: #444;
-
-  font-size: 30px;
-
-  font-weight: bold;
-
-  line-height: 1;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-}
-
-
-/* 右上 ダウンロード */
-
-.gallery-header
-.gallery-download-icon {
-  position: absolute;
-
-  top: 0;
-  right: 0;
-
-  width: 46px;
-  height: 46px;
-
+  margin: 0;
   padding: 0;
 
   border: none;
 
   background: transparent;
 
-  display: flex;
+  cursor: pointer;
 
-  align-items: center;
+  z-index: 10;
 
-  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
 }
 
 
-.gallery-header
-.gallery-download-icon img {
-  width: 34px;
-  height: 34px;
+/* 左上 戻る */
 
-  object-fit: contain;
+.gallery-back-hit {
+  top: 2%;
+  left: 1%;
+
+  width: 12%;
+  height: 16%;
 }
 
 
-/* タイトル下の線 */
+/* 右上 ダウンロード */
 
-.gallery-header-line {
-  width: 52px;
+.gallery-download-hit {
+  top: 2%;
+  right: 1%;
 
-  height: 2px;
-
-  margin:
-    4px
-    auto
-    22px;
-
-  background: #111;
+  width: 12%;
+  height: 16%;
 }
-
-
-/* 説明ボックス */
-
-.gallery-intro-box {
-  margin-bottom: 16px;
-
-  padding:
-    24px
-    18px;
-
-  border:
-    2px solid
-    #b89b6b;
-
-  border-radius: 22px;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.72
-    );
-
-  font-size: 15px;
-
-  line-height: 1.9;
-
-  letter-spacing: 0.5px;
-
-  color: #453a31;
-
-  text-align: center;
-}
-
-
-/* 注意書き */
-
-.gallery-notice {
-  margin-bottom: 22px;
-
-  padding:
-    0
-    8px;
-
-  font-size: 11px;
-
-  line-height: 1.8;
-
-  text-align: left;
-
-  color: #4f4740;
-}
-
-
-.gallery-notice div {
-  margin-top: 3px;
-}
-
-
   
 </style>
 
