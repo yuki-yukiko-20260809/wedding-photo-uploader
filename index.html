@@ -8014,7 +8014,74 @@ function openVideoModal(
 
 }
 
+/* =========================================================
+   モーダル表示中の動画を保存
+========================================================= */
 
+function downloadCurrentVideo() {
+
+
+  if (
+    !currentModalVideoKey
+  ) {
+
+
+    alert(
+      '動画情報を取得できませんでした。'
+    );
+
+
+    return;
+
+  }
+
+
+  const downloadUrl =
+
+    WORKER_URL
+
+    +
+
+    '/video/download'
+
+    +
+
+    '?key='
+
+    +
+
+    encodeURIComponent(
+      currentModalVideoKey
+    );
+
+
+  const anchor =
+    document
+      .createElement(
+        'a'
+      );
+
+
+  anchor.href =
+    downloadUrl;
+
+
+  anchor.style.display =
+    'none';
+
+
+  document.body
+    .appendChild(
+      anchor
+    );
+
+
+  anchor.click();
+
+
+  anchor.remove();
+
+}
 
 function closeVideoModal() {
 
@@ -8046,6 +8113,9 @@ function closeVideoModal() {
       'active'
     );
 
+currentModalVideoKey =
+  null;
+  
 }
 
 
